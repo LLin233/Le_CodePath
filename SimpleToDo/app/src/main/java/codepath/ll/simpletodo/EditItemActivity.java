@@ -1,12 +1,15 @@
 package codepath.ll.simpletodo;
 
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.EditText;
+
+import com.activeandroid.query.Update;
+
+import codepath.ll.simpletodo.Model.ToDoItem;
+import codepath.ll.simpletodo.Model.UpdateEvent;
+import de.greenrobot.event.EventBus;
 
 
 public class EditItemActivity extends ActionBarActivity {
@@ -27,30 +30,12 @@ public class EditItemActivity extends ActionBarActivity {
     }
 
     public void onSaveItem(View v) {
-        Intent data = new Intent();
-        data.putExtra("edited_item_position", mEditItemPosition);
-        data.putExtra("edited_item_content", etEditItem.getText().toString());
-        setResult(RESULT_OK, data);
+        new Update(ToDoItem.class)
+                .set("title = ?", etEditItem.getText().toString())
+                .where("title = ?", mEditItemContent)
+                .execute();
+        EventBus.getDefault().post(new UpdateEvent(mEditItemPosition, etEditItem.getText().toString()));
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_item, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

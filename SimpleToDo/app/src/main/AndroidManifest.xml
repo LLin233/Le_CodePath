@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="codepath.ll.simpletodo" >
+<manifest package="codepath.ll.simpletodo"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
+        android:name=".GlobalContext"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".EditItemActivity"
-            android:label="@string/title_activity_edit_item" >
+            android:label="@string/title_activity_edit_item">
         </activity>
+
+        <!-- add the following metadata for version and database name -->
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="simple_todo.db"/>
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1"/>
+
+
     </application>
 
 </manifest>

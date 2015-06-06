@@ -23,4 +23,11 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile files('libs/commons-io-2.4.jar')
+    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'de.greenrobot:eventbus:2.4.0'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
