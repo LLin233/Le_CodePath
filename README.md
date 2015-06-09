@@ -13,5 +13,5 @@ add `android:hardwareAccelerated=”true”` after appliation tag. It's activate
 5. if no local member is invoked in a method, make it `static`, it will up performance by 15~20%.
 6. Check memory limit per app.
 
-       ` ActivityManager manager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);`
+       ` ActivityManager manager = (ActivityManager)this.getSystemService(Context.ACTIVITY_SERVICE);`
         `Log.d("Memory", manager.getMemoryClass() + "");`
