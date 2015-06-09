@@ -10,7 +10,7 @@ add android:hardwareAccelerated=”true” after appliation tag. It's activated 
 
 setDrawingCache = "true"
 
-####3. <merge> avoid over-drawing layout,  <include> shared layout.
+####3. \<merge\> avoid over-drawing layout,  \<include\> shared layout.
 
 ####4. Use files when you could do it. It's 10 times faster then doing SQL operation.
 
