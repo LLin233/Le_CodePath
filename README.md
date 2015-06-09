@@ -12,5 +12,6 @@ add `android:hardwareAccelerated=”true”` after appliation tag. It's activate
 4. Use files when you could do it. It's 10 times faster then doing SQL operation.
 5. if no local member is invoked in a method, make it `static`, it will up performance by 15~20%.
 6. Check memory limit per app.
+
        ` ActivityManager manager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);`
         `Log.d("Memory", manager.getMemoryClass() + "");`
