@@ -1,1 +1,1 @@
-include ':instagrammaterial', ':navigationdrawer'
+include ':instagrammaterial', ':navigationdrawer', ':material'
