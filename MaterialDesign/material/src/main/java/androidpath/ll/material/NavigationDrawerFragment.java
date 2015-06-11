@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidpath.ll.material.Model.DrawerItem;
-import androidpath.ll.material.Model.DrawerListAdapter;
+import androidpath.ll.material.Adapter.DrawerListAdapter;
 
 
 /**

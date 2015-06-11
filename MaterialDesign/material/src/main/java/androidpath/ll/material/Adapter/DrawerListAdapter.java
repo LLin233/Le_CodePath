@@ -1,4 +1,4 @@
-package androidpath.ll.material.Model;
+package androidpath.ll.material.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
+import androidpath.ll.material.Model.DrawerItem;
 import androidpath.ll.material.R;
 
 /**
