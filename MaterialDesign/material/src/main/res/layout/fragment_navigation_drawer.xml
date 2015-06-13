@@ -2,7 +2,6 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#DADADA"
                 tools:context="androidpath.ll.material.NavigationDrawerFragment">
 
     <LinearLayout
@@ -29,7 +28,8 @@
         android:id="@+id/drawerList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/containerDrawerImage">
+        android:layout_below="@+id/containerDrawerImage"
+        android:background="@android:color/white">
 
     </android.support.v7.widget.RecyclerView>
 

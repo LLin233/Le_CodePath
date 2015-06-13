@@ -22,6 +22,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="16dp"
         android:text="Dummy Text"
+        android:textColor="@color/colorPrimaryText"
         />
 
 
