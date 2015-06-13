@@ -2,24 +2,52 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/white"
                 tools:context="androidpath.ll.material.NavigationDrawerFragment">
 
     <LinearLayout
         android:id="@+id/containerDrawerImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:background="@color/colorPrimary">
+        android:layout_marginBottom="3dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:paddingLeft="16dp">
 
         <ImageView
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="24dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="@dimen/drawer_marginTop"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/poke0011"
+            android:src="@drawable/banana"
             />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="Leonard L"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:text="https://github.com/LLin233"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -29,6 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/containerDrawerImage"
+        android:layout_marginTop="3dp"
         android:background="@android:color/white">
 
     </android.support.v7.widget.RecyclerView>
