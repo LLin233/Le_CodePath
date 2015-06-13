@@ -27,7 +27,7 @@ import androidpath.ll.material.Model.DrawerItem;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NavigationDrawerFragment extends Fragment implements DrawerListAdapter.ClickListener {
+public class NavigationDrawerFragment extends Fragment{
 
     public static final String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
 
@@ -61,7 +61,6 @@ public class NavigationDrawerFragment extends Fragment implements DrawerListAdap
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
         mDrawerListAdapter = new DrawerListAdapter(getActivity(), getData());
-        mDrawerListAdapter.setClickListener(this);
         mRecyclerView.setAdapter(mDrawerListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -149,11 +148,5 @@ public class NavigationDrawerFragment extends Fragment implements DrawerListAdap
     public static boolean readFromPreferences(Context context, String preferenceName, boolean defaultValue) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getBoolean(preferenceName, defaultValue);
-    }
-
-    @Override
-    public void itemClicked(View view, int position) {
-        //navigation to different page
-        Toast.makeText(getActivity(),"Intent created " + position, Toast.LENGTH_SHORT).show();
     }
 }

@@ -21,7 +21,6 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
 
     private Context context;
     private LayoutInflater mInflater;
-    private ClickListener mClickListener;
 
     List<DrawerItem> data = Collections.emptyList();  //avoid null
 
@@ -37,9 +36,6 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
         notifyItemRemoved(position);
     }
 
-    public void setClickListener(ClickListener clickListener){
-        mClickListener = clickListener;
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -73,14 +69,7 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
 
         @Override
         public void onClick(View v) {
-            if (mClickListener != null) {
-                //drawer fragment controls the behavior
-                mClickListener.itemClicked(v, getAdapterPosition());
-            }
         }
     }
 
-    public interface ClickListener {
-        public void itemClicked(View view, int position);
-    }
 }
