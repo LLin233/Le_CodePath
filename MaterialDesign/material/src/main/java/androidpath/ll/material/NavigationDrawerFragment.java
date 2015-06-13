@@ -19,8 +19,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidpath.ll.material.Model.DrawerItem;
 import androidpath.ll.material.Adapter.DrawerListAdapter;
+import androidpath.ll.material.Model.DrawerItem;
 
 
 /**
@@ -125,10 +125,11 @@ public class NavigationDrawerFragment extends Fragment {
                 "Events"
         };
 
-        for (int i = 0; i < titles.length && i < icons.length; i++) {
+        //for (int i = 0; i < titles.length && i < icons.length; i++)
+        for (int i = 0; i < 100; i++) {
             DrawerItem item = new DrawerItem();
-            item.setIconId(icons[i]);
-            item.setTitle(titles[i]);
+            item.setIconId(icons[i % icons.length]);
+            item.setTitle(titles[i % titles.length]);
             drawerItems.add(item);
         }
 

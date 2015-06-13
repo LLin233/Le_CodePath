@@ -19,13 +19,20 @@ import androidpath.ll.material.R;
  */
 public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.ViewHolder> {
 
+    private Context context;
     private LayoutInflater mInflater;
     List<DrawerItem> data = Collections.emptyList();  //avoid null
 
 
     public DrawerListAdapter(Context context, List<DrawerItem> data) {
+        this.context = context;
         mInflater = LayoutInflater.from(context);
         this.data = data;
+    }
+
+    public void deleteItem(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override
@@ -56,5 +63,6 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
             title = (TextView) itemView.findViewById(R.id.drawer_item_title);
             icon = (ImageView) itemView.findViewById(R.id.drawer_item_icon);
         }
+
     }
 }
