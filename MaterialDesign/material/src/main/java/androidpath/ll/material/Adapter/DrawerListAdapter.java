@@ -21,6 +21,8 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
 
     private Context context;
     private LayoutInflater mInflater;
+    private ClickListener mClickListener;
+
     List<DrawerItem> data = Collections.emptyList();  //avoid null
 
 
@@ -33,6 +35,10 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
     public void deleteItem(int position) {
         data.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void setClickListener(ClickListener clickListener){
+        mClickListener = clickListener;
     }
 
     @Override
@@ -54,15 +60,27 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
         return data.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView title;
         ImageView icon;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             title = (TextView) itemView.findViewById(R.id.drawer_item_title);
             icon = (ImageView) itemView.findViewById(R.id.drawer_item_icon);
         }
 
+        @Override
+        public void onClick(View v) {
+            if (mClickListener != null) {
+                //drawer fragment controls the behavior
+                mClickListener.itemClicked(v, getAdapterPosition());
+            }
+        }
+    }
+
+    public interface ClickListener {
+        public void itemClicked(View view, int position);
     }
 }
