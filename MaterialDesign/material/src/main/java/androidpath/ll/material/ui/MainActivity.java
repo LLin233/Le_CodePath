@@ -1,25 +1,37 @@
 package androidpath.ll.material.ui;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
+import androidpath.ll.material.ui.widget.SlidingTabLayout;
 
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
+    private ViewPager mViewPager;
+    private SlidingTabLayout mSlidingTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         setUpToolBar();
+        //set up Drawer
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+
+        mSlidingTab = (SlidingTabLayout) findViewById(R.id.tabs);
+        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        mSlidingTab.setViewPager(mViewPager);
 
 
     }
@@ -51,4 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
