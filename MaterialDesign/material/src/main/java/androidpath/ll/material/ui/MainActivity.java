@@ -28,9 +28,18 @@ public class MainActivity extends AppCompatActivity {
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
-        mSlidingTab = (SlidingTabLayout) findViewById(R.id.tabs);
+
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), this));
+        mSlidingTab = (SlidingTabLayout) findViewById(R.id.tabs);
+        mSlidingTab.setDistributeEvenly(true);
+        mSlidingTab.setCustomTabView(R.layout.custom_tab_view, R.id.tabTitle);
+        mSlidingTab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.colorAccent);
+            }
+        });
         mSlidingTab.setViewPager(mViewPager);
 
 

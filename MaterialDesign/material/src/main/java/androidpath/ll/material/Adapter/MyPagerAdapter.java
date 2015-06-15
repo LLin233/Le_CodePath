@@ -1,9 +1,16 @@
 package androidpath.ll.material.Adapter;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 
+import androidpath.ll.material.R;
 import androidpath.ll.material.ui.MyFragment;
 
 /**
@@ -11,10 +18,18 @@ import androidpath.ll.material.ui.MyFragment;
  */
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
-    String[] tabs = {"TAB1", "TAB2", "TAB3"};
+    private Context mContext;
 
-    public MyPagerAdapter(FragmentManager fm) {
+    String[] tabText;
+    int[] icons = {R.drawable.ic_action_home, R.drawable.ic_action_articles, R.drawable.ic_action_personal};
+
+    @Nullable
+    Drawable drawable;
+
+    public MyPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
+        mContext = context;
+        tabText = context.getResources().getStringArray(R.array.tabs);
     }
 
     @Override
@@ -30,6 +45,17 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return tabs[position];
+
+        if (mContext != null) {
+            drawable = mContext.getResources().getDrawable(icons[position]);
+            assert drawable != null;
+            drawable.setBounds(0, 0, 144, 144);
+        }
+
+        ImageSpan imageSpan = new ImageSpan(drawable);
+        SpannableString spannableString = new SpannableString(" ");
+        spannableString.setSpan(imageSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannableString;
     }
 }
