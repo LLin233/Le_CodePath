@@ -1,22 +1,26 @@
 package androidpath.ll.material.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
-import androidpath.ll.material.ui.widget.SlidingTabLayout;
 
 
 public class MainActivity extends AppCompatActivity {
-    private Toolbar toolbar;
-    private ViewPager mViewPager;
-    private SlidingTabLayout mSlidingTab;
+    private Toolbar mToolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,30 +29,57 @@ public class MainActivity extends AppCompatActivity {
 
         setUpToolBar();
         //set up Drawer
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+        setUpDrawer();
 
-
-        mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), this));
-        mSlidingTab = (SlidingTabLayout) findViewById(R.id.tabs);
-        mSlidingTab.setDistributeEvenly(true);
-        mSlidingTab.setCustomTabView(R.layout.custom_tab_view, R.id.tabTitle);
-        mSlidingTab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.colorAccent);
-            }
-        });
-        mSlidingTab.setViewPager(mViewPager);
-
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(),
+                this));
+        setUpTabLayoutIconTop(viewPager);
 
     }
 
+    private void setUpTabLayout(ViewPager viewPager) {
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_action_home);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_personal);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_action_articles);
+    }
+
+    private void setUpTabLayoutIconTop(ViewPager viewPager) {
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setCustomView(getTabView("TAB1", R.drawable.ic_action_home));
+        tabLayout.getTabAt(1).setCustomView(getTabView("TAB2", R.drawable.ic_action_personal));
+        tabLayout.getTabAt(2).setCustomView(getTabView("TAB3", R.drawable.ic_action_articles));
+    }
+
+    private View getTabView(String tabText, int iconId) {
+        View view = LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        ImageView icon = ((ImageView) view.findViewById(R.id.tabIcon));
+        icon.setImageResource(iconId);
+        TextView title = ((TextView) view.findViewById(R.id.tabText));
+        title.setText(tabText);
+        return view;
+    }
+
+
+    private TextView createTabView(String tabText, int iconId) {
+        TextView tab = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab_view, null);
+        tab.setText(tabText);
+        tab.setCompoundDrawablesWithIntrinsicBounds(0, iconId, 0, 0);
+        return tab;
+    }
+
+    private void setUpDrawer() {
+        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+    }
+
     private void setUpToolBar() {
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        toolbar.setTitle("Moooo");
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        mToolbar.setTitle("Moooo");
+        setSupportActionBar(mToolbar);
     }
 
     @Override
@@ -66,10 +97,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings: {
+                return true;
+            }
+            case R.id.action_tab_with_lib: {
+                Intent intent = new Intent(this, UsingTabLibActivity.class);
+                startActivity(intent);
+                break;
+            }
         }
-
         return super.onOptionsItemSelected(item);
     }
 
