@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#512DA8</color>
     <color name="colorPrimaryLight">#D1C4E9</color>
     <color name="colorAccent">#FFC107</color>
-    <color name="colorHighlight">#B6B6B6</color>
+    <!--#B6B6B6-->
+    <color name="colorHighlight">#ba9dda</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
