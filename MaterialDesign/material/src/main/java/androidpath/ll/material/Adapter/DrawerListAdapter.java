@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
-import androidpath.ll.material.Model.DrawerItem;
+import androidpath.ll.material.Models.DrawerItem;
 import androidpath.ll.material.R;
 
 /**

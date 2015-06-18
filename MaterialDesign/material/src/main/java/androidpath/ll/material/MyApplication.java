@@ -8,7 +8,6 @@ import android.content.Context;
  */
 public class MyApplication extends Application {
     private static MyApplication mInstance;
-
     @Override
     public void onCreate() {
         super.onCreate();

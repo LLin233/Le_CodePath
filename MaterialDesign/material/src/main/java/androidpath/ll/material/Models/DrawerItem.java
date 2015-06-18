@@ -1,4 +1,4 @@
-package androidpath.ll.material.Model;
+package androidpath.ll.material.Models;
 
 /**
  * Created by Le on 2015/6/10.

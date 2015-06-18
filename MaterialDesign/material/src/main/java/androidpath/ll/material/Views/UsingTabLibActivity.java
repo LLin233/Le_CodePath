@@ -1,4 +1,4 @@
-package androidpath.ll.material.ui;
+package androidpath.ll.material.Views;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
-import androidpath.ll.material.ui.widget.SlidingTabLayout;
+import androidpath.ll.material.Views.widget.SlidingTabLayout;
 
 public class UsingTabLibActivity extends AppCompatActivity {
     private Toolbar mToolbar;

@@ -4,14 +4,14 @@
               android:layout_height="match_parent"
               android:background="@android:color/white"
               android:orientation="vertical"
-              tools:context="androidpath.ll.material.ui.UsingTabLibActivity"
+              tools:context="androidpath.ll.material.Views.UsingTabLibActivity"
     >
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar"/>
 
-    <androidpath.ll.material.ui.widget.SlidingTabLayout
+    <androidpath.ll.material.Views.widget.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

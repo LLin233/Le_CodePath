@@ -3,16 +3,23 @@ package androidpath.ll.material.Adapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import androidpath.ll.material.R;
-import androidpath.ll.material.ui.PageFragment;
+import androidpath.ll.material.Views.fragments.FragmentBoxOffice;
+import androidpath.ll.material.Views.fragments.FragmentMovieSearch;
+import androidpath.ll.material.Views.fragments.FragmentUpComingMovie;
 
 /**
  * Created by Le on 2015/6/14.
  */
 
-public class MyPagerAdapter extends FragmentPagerAdapter {
+public class MyPagerAdapter extends FragmentStatePagerAdapter {
+
+    public static final int MOVIES_SEARCH_RESULT = 0;
+    public static final int MOVIES_BOX_OFFICE = 1;
+    public static final int MOVIES_UPCOMING = 2;
+
     final int PAGE_COUNT = 3;
     private Context mContext;
 
@@ -32,7 +39,22 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.getInstence(position + 1);
+        Fragment fragment = null;
+        switch (position) {
+            case MOVIES_SEARCH_RESULT: {
+                fragment = FragmentMovieSearch.newInstance("", "");
+                break;
+            }
+            case MOVIES_BOX_OFFICE: {
+                fragment = FragmentBoxOffice.newInstance("", "");
+                break;
+            }
+            case MOVIES_UPCOMING: {
+                fragment = FragmentUpComingMovie.newInstance("", "");
+                break;
+            }
+        }
+        return fragment;
     }
 
     @Override

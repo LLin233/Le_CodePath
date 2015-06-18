@@ -1,4 +1,4 @@
-package androidpath.ll.material.ui;
+package androidpath.ll.material.Views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,18 +20,21 @@ import androidpath.ll.material.R;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
-
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setUpToolBar();
         //set up Drawer
         setUpDrawer();
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+
         viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(),
                 this));
         setUpTabLayoutIconTop(viewPager);
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpTabLayoutIconTop(ViewPager viewPager) {
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setCustomView(getTabView("TAB1", R.drawable.ic_action_home));
         tabLayout.getTabAt(1).setCustomView(getTabView("TAB2", R.drawable.ic_action_personal));

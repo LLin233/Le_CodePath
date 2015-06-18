@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".Views.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -20,19 +20,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.UsingTabLibActivity"
+            android:name=".Views.UsingTabLibActivity"
             android:label="@string/title_activity_using_tab_lib"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName=".Views.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="androidpath.ll.material.ui.MainActivity"/>
+                android:value="androidpath.ll.material.Views.MainActivity"/>
         </activity>
         <activity
-            android:name=".ui.VectorDemoActivity"
+            android:name=".Views.VectorDemoActivity"
             android:label="@string/title_activity_vector_demo">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="androidpath.ll.material.ui.MainActivity"/>
+                android:value="androidpath.ll.material.Views.MainActivity"/>
         </activity>
     </application>
 

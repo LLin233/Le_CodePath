@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="horizontal"
     >
 
@@ -34,14 +33,14 @@
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="1"
-            android:background="@android:color/white"/>
+            />
 
 
     </LinearLayout>
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"
-        android:name="androidpath.ll.material.ui.NavigationDrawerFragment"
+        android:name="androidpath.ll.material.Views.NavigationDrawerFragment"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
