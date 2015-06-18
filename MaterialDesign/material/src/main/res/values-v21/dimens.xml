@@ -2,4 +2,7 @@
 <resources>
     <dimen name="app_bar_top_padding">24dp</dimen>
     <dimen name="drawer_margin_top">48dp</dimen>
+    <dimen name="size_half_byte">4dp</dimen>
+    <dimen name="size_text_secondary">14sp</dimen>
+    <dimen name="size_text_primary">16sp</dimen>
 </resources>
