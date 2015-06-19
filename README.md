@@ -17,4 +17,7 @@ add `android:hardwareAccelerated=”true”` after appliation tag. It's activate
         `Log.d("Memory", manager.getMemoryClass() + "");`
 
 7. Why Viewholder? 
-ListView or RecyclerView could only call findbyId() limited times and then reuse the elements when list scrolled up or down.   Tip: declare Viewholder with key word `static`, and it will reduce the amount of `this` calls from `MainActivity`, and then reduce the amount of `MainActivity` reference calls.
+
+ListView or RecyclerView could only call findbyId() limited times and then reuse the elements when list scrolled up or down.   
+
+Tip: declare Viewholder with key word `static`, and it will reduce the amount of `this` calls from `MainActivity`, and then reduce the amount of `MainActivity` reference calls.
