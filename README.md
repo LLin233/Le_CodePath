@@ -18,6 +18,6 @@ add `android:hardwareAccelerated=”true”` after appliation tag. It's activate
 
 7. Why Viewholder? 
 
-ListView or RecyclerView could only call findbyId() limited times and then reuse the elements when list scrolled up or down.   
+	ListView or RecyclerView could only call findbyId() limited times and then reuse the elements when list scrolled up or down.   
 
-Tip: declare Viewholder with key word `static`, and it will reduce the amount of `this` calls from `MainActivity`, and then reduce the amount of `MainActivity` reference calls.
+	Tip: declare Viewholder with key word `static`, and it will reduce the amount of `this` calls from `MainActivity`, and then reduce the amount of `MainActivity` reference calls.
