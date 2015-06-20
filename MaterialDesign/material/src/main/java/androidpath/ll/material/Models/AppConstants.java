@@ -21,4 +21,8 @@ public abstract class AppConstants {
         String KEY_REVIEWS = "reviews";
         String KEY_SIMILAR = "similar";
     }
+
+    public interface Constants {
+        String NA = "N/A";
+    }
 }
