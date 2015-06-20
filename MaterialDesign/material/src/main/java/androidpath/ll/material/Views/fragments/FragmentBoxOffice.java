@@ -135,18 +135,20 @@ public class FragmentBoxOffice extends Fragment {
             return listMovies;
         }
 
-        //give default value to handle null value in JSON to the needed property
-        long id = 0;
-        String title = Constants.NA;
-        int audienceScore = -1;
-        String synopsis = Constants.NA;
-        String urlThumbnail = Constants.NA;
-        String releaseDate = Constants.NA;
-
         try {
             StringBuilder data = new StringBuilder();
             JSONArray arrayMovie = response.getJSONArray(KEY_MOVIES);
             for (int i = 0; i < arrayMovie.length(); i++) {
+
+                //give default value to handle null value in JSON to the needed property
+                //set default value inside the for loop so that if any exception occured, it won't be treated as valid movie that data comes from previous item.
+                long id = 0;
+                String title = Constants.NA;
+                int audienceScore = -1;
+                String synopsis = Constants.NA;
+                String urlThumbnail = Constants.NA;
+                String releaseDate = Constants.NA;
+
                 JSONObject currentMovie = arrayMovie.getJSONObject(i);
                 //get the id of current movie
                 if (currentMovie.has(KEY_ID) && !currentMovie.isNull(KEY_ID)) {
