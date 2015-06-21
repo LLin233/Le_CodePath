@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
 
@@ -38,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(),
                 this));
         setUpTabLayoutIconTop(viewPager);
+
+
+        ImageView icon = new ImageView(this); // Create an icon
+        icon.setImageResource(R.mipmap.ic_launcher);
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setContentView(icon)
+                .build();
+
 
     }
 
