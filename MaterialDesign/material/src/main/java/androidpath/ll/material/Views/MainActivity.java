@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
@@ -42,13 +44,36 @@ public class MainActivity extends AppCompatActivity {
         setUpTabLayoutIconTop(viewPager);
 
 
-        ImageView icon = new ImageView(this); // Create an icon
-        icon.setImageResource(R.mipmap.ic_launcher);
+        //setUp FloatActionButton
+        ImageView floatButtonImageView = new ImageView(this); // Create an icon
+        floatButtonImageView.setImageResource(R.mipmap.ic_launcher);
 
         FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
-                .setContentView(icon)
+                .setContentView(floatButtonImageView)
                 .build();
 
+        ImageView iconSortName = new ImageView(this); // Create an icon
+        iconSortName.setImageResource(R.drawable.ic_action_upcoming_orange);
+
+        ImageView iconSortDate = new ImageView(this); // Create an icon
+        iconSortDate.setImageResource(R.drawable.ic_action_upcoming_orange);
+
+        ImageView iconSortRating = new ImageView(this); // Create an icon
+        iconSortRating.setImageResource(R.drawable.ic_action_upcoming_orange);
+
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+
+        SubActionButton btnSortByName = itemBuilder.setContentView(iconSortName).build();
+        SubActionButton btnSortByDate = itemBuilder.setContentView(iconSortDate).build();
+        SubActionButton btnSortByRating = itemBuilder.setContentView(iconSortRating).build();
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(btnSortByName)
+                .addSubActionView(btnSortByDate)
+                .addSubActionView(btnSortByRating)
+                .attachTo(actionButton)
+                .build();
 
     }
 
@@ -128,6 +153,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }
