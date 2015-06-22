@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,29 +28,40 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private DrawerLayout drawer_layout;
+    FloatingActionMenu actionMenu;
+    FloatingActionButton actionButton;
+
+    Animation animationFadeIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpToolBar();
-        //set up Drawer
-        setUpDrawer();
 
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-
+        init();
         viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(),
                 this));
         setUpTabLayoutIconTop(viewPager);
+        setUpFloatActionMenu();
+
+    }
+
+    private void init() {
+
+        animationFadeIn = AnimationUtils.loadAnimation(this,R.anim.fade_in);
+        setUpToolBar();
+        setUpDrawer();
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+    }
 
 
-        //setUp FloatActionButton
+    private void setUpFloatActionMenu() {
         ImageView floatButtonImageView = new ImageView(this); // Create an icon
         floatButtonImageView.setImageResource(R.mipmap.ic_launcher);
 
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+        actionButton = new FloatingActionButton.Builder(this)
                 .setContentView(floatButtonImageView)
                 .build();
 
@@ -68,14 +81,14 @@ public class MainActivity extends AppCompatActivity {
         SubActionButton btnSortByDate = itemBuilder.setContentView(iconSortDate).build();
         SubActionButton btnSortByRating = itemBuilder.setContentView(iconSortRating).build();
 
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+        actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(btnSortByName)
                 .addSubActionView(btnSortByDate)
                 .addSubActionView(btnSortByRating)
                 .attachTo(actionButton)
                 .build();
-
     }
+
 
     private void setUpTabLayout(ViewPager viewPager) {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -111,8 +124,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpDrawer() {
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+
+        drawer_layout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                actionButton.setAlpha(1 - slideOffset);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                actionButton.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+                animationFadeIn.setDuration((long) drawerView.getScrollBarFadeDuration());
+                actionButton.startAnimation(animationFadeIn);
+                actionButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
     }
 
     private void setUpToolBar() {
