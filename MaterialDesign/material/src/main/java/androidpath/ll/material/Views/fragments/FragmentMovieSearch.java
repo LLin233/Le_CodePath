@@ -6,15 +6,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidpath.ll.material.R;
+import androidpath.ll.material.interfaces.SortListener;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FragmentMovieSearch#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentMovieSearch extends Fragment {
+public class FragmentMovieSearch extends Fragment implements SortListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,4 +66,18 @@ public class FragmentMovieSearch extends Fragment {
     }
 
 
+    @Override
+    public void onSortByName() {
+        Toast.makeText(getActivity(), "Fragment search sort names", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSortByDate() {
+
+    }
+
+    @Override
+    public void onSortByRating() {
+
+    }
 }

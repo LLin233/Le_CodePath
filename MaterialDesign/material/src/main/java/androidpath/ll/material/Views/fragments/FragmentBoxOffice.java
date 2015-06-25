@@ -36,7 +36,9 @@ import androidpath.ll.material.Adapter.BoxOfficeAdapter;
 import androidpath.ll.material.Models.AppConstants.Constants;
 import androidpath.ll.material.Models.Movie;
 import androidpath.ll.material.R;
+import androidpath.ll.material.Utils.MovieSorter;
 import androidpath.ll.material.Utils.RottenTomatoesClient;
+import androidpath.ll.material.interfaces.SortListener;
 import androidpath.ll.material.network.VolleySingleton;
 
 import static androidpath.ll.material.Models.AppConstants.EndpointBoxOffice.KEY_AUDIENCE_SCORE;
@@ -56,8 +58,7 @@ import static com.android.volley.Response.ErrorListener;
  * Use the {@link FragmentBoxOffice#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentBoxOffice extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+public class FragmentBoxOffice extends Fragment implements SortListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -70,6 +71,7 @@ public class FragmentBoxOffice extends Fragment {
     private RequestQueue mRequestQueue;
     private DateFormat dateFormat;
     private ArrayList<Movie> listMovies;
+    private MovieSorter mMovieSorter;
 
     //UI
     private RecyclerView mRecyclerViewMovieList;
@@ -99,12 +101,20 @@ public class FragmentBoxOffice extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //save movieList here so data won't reload without order when orientation has been changed
+    }
+
     private void init() {
         listMovies = new ArrayList<>();
         dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        mMovieSorter = new MovieSorter();
         //request data via network
         mVolleySingleton = VolleySingleton.getInstance();
         mRequestQueue = mVolleySingleton.getRequestQueue();
+
     }
 
     @Override
@@ -276,4 +286,22 @@ public class FragmentBoxOffice extends Fragment {
     }
 
 
+    //this method will be call before onCreateView(), to avoid nullException, instantiateItem before consuming this event
+    @Override
+    public void onSortByName() {
+        mMovieSorter.sortMoviesByName(listMovies);
+        mBoxOfficeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSortByDate() {
+        mMovieSorter.sortMoviesByDate(listMovies);
+        mBoxOfficeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSortByRating() {
+        mMovieSorter.sortMoviesByRating(listMovies);
+        mBoxOfficeAdapter.notifyDataSetChanged();
+    }
 }

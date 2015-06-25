@@ -3,6 +3,8 @@ package androidpath.ll.material.Views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,13 +24,19 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
+import androidpath.ll.material.interfaces.SortListener;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG_SORT_NAME = "sortName";
+    private static final String TAG_SORT_DATE = "sortDate";
+    private static final String TAG_SORT_Rating = "sortRating";
+
     private Toolbar mToolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private DrawerLayout drawer_layout;
+    private FragmentStatePagerAdapter mPagerAdapter;
     FloatingActionMenu actionMenu;
     FloatingActionButton actionButton;
 
@@ -40,16 +48,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
-        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(),
-                this));
+
+        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(mPagerAdapter);
         setUpTabLayoutIconTop(viewPager);
         setUpFloatActionMenu();
+
 
     }
 
     private void init() {
 
-        animationFadeIn = AnimationUtils.loadAnimation(this,R.anim.fade_in);
+        animationFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         setUpToolBar();
         setUpDrawer();
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -59,27 +69,37 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpFloatActionMenu() {
         ImageView floatButtonImageView = new ImageView(this); // Create an icon
-        floatButtonImageView.setImageResource(R.mipmap.ic_launcher);
+        floatButtonImageView.setImageResource(R.drawable.ic_action_new);
 
         actionButton = new FloatingActionButton.Builder(this)
                 .setContentView(floatButtonImageView)
+                .setBackgroundDrawable(R.drawable.float_button_red)
                 .build();
 
         ImageView iconSortName = new ImageView(this); // Create an icon
-        iconSortName.setImageResource(R.drawable.ic_action_upcoming_orange);
+        iconSortName.setImageResource(R.drawable.ic_action_alphabets);
 
         ImageView iconSortDate = new ImageView(this); // Create an icon
-        iconSortDate.setImageResource(R.drawable.ic_action_upcoming_orange);
+        iconSortDate.setImageResource(R.drawable.ic_action_calendar);
 
         ImageView iconSortRating = new ImageView(this); // Create an icon
-        iconSortRating.setImageResource(R.drawable.ic_action_upcoming_orange);
+        iconSortRating.setImageResource(R.drawable.ic_action_important);
 
-
+        //set up sub buttons
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.float_button_subs));
 
         SubActionButton btnSortByName = itemBuilder.setContentView(iconSortName).build();
         SubActionButton btnSortByDate = itemBuilder.setContentView(iconSortDate).build();
         SubActionButton btnSortByRating = itemBuilder.setContentView(iconSortRating).build();
+
+        btnSortByName.setTag(TAG_SORT_NAME);
+        btnSortByDate.setTag(TAG_SORT_DATE);
+        btnSortByRating.setTag(TAG_SORT_Rating);
+
+        btnSortByName.setOnClickListener(this);
+        btnSortByDate.setOnClickListener(this);
+        btnSortByRating.setOnClickListener(this);
 
         actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(btnSortByName)
@@ -124,14 +144,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpDrawer() {
-        drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         final NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
 
         drawer_layout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                actionButton.setAlpha(1 - slideOffset);
+                actionButton.setAlpha(1 - slideOffset);  //slideOffset is 0 (drawer closed) to 1 (drawer opened).
             }
 
             @Override
@@ -168,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -194,4 +215,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //handle float action button onClickEvent
+    @Override
+    public void onClick(View v) {
+        Fragment fragment = (Fragment) mPagerAdapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+        if (fragment instanceof SortListener) {
+            switch (v.getTag().toString()) {
+                //TODO use eventbus to handle event
+                case TAG_SORT_NAME:
+                    ((SortListener) fragment).onSortByName();
+                    break;
+                case TAG_SORT_DATE:
+                    ((SortListener) fragment).onSortByDate();
+                    break;
+                case TAG_SORT_Rating:
+                    ((SortListener) fragment).onSortByRating();
+                    break;
+            }
+        }
+
+
+    }
 }
