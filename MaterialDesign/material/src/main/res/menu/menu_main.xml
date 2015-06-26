@@ -1,19 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
-    <item
-        android:id="@+id/action_tab_with_lib"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_tab_with_lib_activity"/>
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_vector"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="VectorDemo"/>
+        android:title="VectorDemo"
+        app:showAsAction="never"/>
 </menu>

@@ -7,15 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,29 +36,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private FragmentStatePagerAdapter mPagerAdapter;
-    private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
 
     FloatingActionMenu actionMenu;
     FloatingActionButton actionButton;
 
-    Animation animationFadeIn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
         setUpToolBar();
         setUpFloatActionMenu();
         setUpDrawer();
         setUpTab();
         setUpTabLayoutIconTop(viewPager);
 
-    }
-
-    private void init() {
-        animationFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
     }
 
     private void setUpTab() {
@@ -85,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, mDrawerLayout, mToolbar, actionButton, actionMenu);
     }
-
 
     private void setUpFloatActionMenu() {
         ImageView floatButtonImageView = new ImageView(this); // Create an icon
@@ -129,15 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
     }
 
-
-    private void setUpTabLayout(ViewPager viewPager) {
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_action_home);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_personal);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_action_articles);
-    }
-
     private void setUpTabLayoutIconTop(ViewPager viewPager) {
 
         tabLayout.setupWithViewPager(viewPager);
@@ -154,15 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         title.setText(tabText);
         return view;
     }
-
-
-    private TextView createTabView(String tabText, int iconId) {
-        TextView tab = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab_view, null);
-        tab.setText(tabText);
-        tab.setCompoundDrawablesWithIntrinsicBounds(0, iconId, 0, 0);
-        return tab;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,11 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.action_settings: {
                 return true;
             }
-            case R.id.action_tab_with_lib: {
-                Intent intent = new Intent(this, UsingTabLibActivity.class);
-                startActivity(intent);
-                break;
-            }
+
             case R.id.action_vector: {
                 Intent intent = new Intent(this, VectorDemoActivity.class);
                 startActivity(intent);
