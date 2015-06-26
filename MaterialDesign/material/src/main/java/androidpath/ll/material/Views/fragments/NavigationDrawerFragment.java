@@ -3,6 +3,7 @@ package androidpath.ll.material.Views.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -17,6 +19,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,49 +91,58 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 
-//    public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
-//
-//        containerView = getActivity().findViewById(fragmentId);
-//        mDrawerLayout = drawerLayout;
-//        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-//            @Override
-//            public void onDrawerOpened(View drawerView) {
-//                super.onDrawerOpened(drawerView);
-//                getActivity().invalidateOptionsMenu();
-//            }
-//
-//            @Override
-//            public void onDrawerClosed(View drawerView) {
-//                super.onDrawerClosed(drawerView);
-//                getActivity().invalidateOptionsMenu();
-//            }
-//
-//            @Override
-//            public void onDrawerSlide(View drawerView, float slideOffset) {
-//                super.onDrawerSlide(drawerView, slideOffset);
-//                if (slideOffset < 0.6) {
-//                    toolbar.setAlpha(1 - slideOffset);
-//                }
-//
-//
-//            }
-//        };
-//
-//        mDrawerLayout.setDrawerListener(mDrawerToggle);
-//        mDrawerLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                mDrawerToggle.syncState();
-//                if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-//                    mDrawerLayout.openDrawer(containerView);
-//                    mUserLearnedDrawer = true;
-//                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer);
-//                }
-//            }
-//        });
-//
-//    }
-//
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar, final FloatingActionButton actionButton, final FloatingActionMenu actionMenu) {
+
+        containerView = getActivity().findViewById(fragmentId);
+        mDrawerLayout = drawerLayout;
+        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getActivity().invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                getActivity().invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                if (slideOffset < 0.6) {
+                    toolbar.setAlpha(1 - slideOffset);
+                }
+                if (actionMenu.isOpen()) {
+                    actionMenu.close(true);
+                }
+                actionButton.setAlpha(1 - slideOffset);
+
+            }
+        };
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerToggle.syncState();
+                if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+                    mDrawerLayout.openDrawer(containerView);
+                    mUserLearnedDrawer = true;
+                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer);
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
 
     public static List<DrawerItem> getData() {
         List<DrawerItem> drawerItems = new ArrayList<DrawerItem>();

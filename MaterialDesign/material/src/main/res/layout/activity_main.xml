@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:orientation="vertical"
         tools:context=".MainActivity"
         >
@@ -34,7 +35,6 @@
             android:layout_height="0px"
             android:layout_weight="1"
             />
-
 
     </LinearLayout>
 
