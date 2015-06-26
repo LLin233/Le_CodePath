@@ -1,17 +1,15 @@
-package androidpath.ll.material.Views;
+package androidpath.ll.material.Views.fragments;
 
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -47,13 +45,11 @@ public class NavigationDrawerFragment extends Fragment {
 
     public static final String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
 
-
-    @LayoutRes
+    private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-
     private RecyclerView mRecyclerView;
     private RecyclerTouchListener mRecyclerTouchListener;
-    private ActionBarDrawerToggle mDrawerToogle;
+
     private View containerView;
     private DrawerListAdapter mDrawerListAdapter;
 
@@ -90,48 +86,49 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 
-    public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
-
-        containerView = getActivity().findViewById(fragmentId);
-        mDrawerLayout = drawerLayout;
-        mDrawerToogle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActivity().invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                getActivity().invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-                if (slideOffset < 0.6) {
-                    toolbar.setAlpha(1 - slideOffset);
-                }
-
-
-            }
-        };
-
-        mDrawerLayout.setDrawerListener(mDrawerToogle);
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToogle.syncState();
-                if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-                    mUserLearnedDrawer = true;
-                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer);
-                }
-
-            }
-        });
-
-    }
+//    public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
+//
+//        containerView = getActivity().findViewById(fragmentId);
+//        mDrawerLayout = drawerLayout;
+//        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+//            @Override
+//            public void onDrawerOpened(View drawerView) {
+//                super.onDrawerOpened(drawerView);
+//                getActivity().invalidateOptionsMenu();
+//            }
+//
+//            @Override
+//            public void onDrawerClosed(View drawerView) {
+//                super.onDrawerClosed(drawerView);
+//                getActivity().invalidateOptionsMenu();
+//            }
+//
+//            @Override
+//            public void onDrawerSlide(View drawerView, float slideOffset) {
+//                super.onDrawerSlide(drawerView, slideOffset);
+//                if (slideOffset < 0.6) {
+//                    toolbar.setAlpha(1 - slideOffset);
+//                }
+//
+//
+//            }
+//        };
+//
+//        mDrawerLayout.setDrawerListener(mDrawerToggle);
+//        mDrawerLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mDrawerToggle.syncState();
+//                if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+//                    mDrawerLayout.openDrawer(containerView);
+//                    mUserLearnedDrawer = true;
+//                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer);
+//                }
+//            }
+//        });
+//
+//    }
+//
 
     public static List<DrawerItem> getData() {
         List<DrawerItem> drawerItems = new ArrayList<DrawerItem>();
@@ -171,7 +168,6 @@ public class NavigationDrawerFragment extends Fragment {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getBoolean(preferenceName, defaultValue);
     }
-
 
     private RecyclerTouchListener setUpRecyclerTouchListener() {
         RecyclerTouchListener recyclerTouchListener = new RecyclerTouchListener(getActivity(), mRecyclerView, new ClickListener() {
@@ -246,4 +242,6 @@ public class NavigationDrawerFragment extends Fragment {
 
         public void onLongClick(View view, int postion);
     }
+
+
 }

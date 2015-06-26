@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"
-        android:name="androidpath.ll.material.Views.NavigationDrawerFragment"
+        android:name="androidpath.ll.material.Views.fragments.NavigationDrawerFragment"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"

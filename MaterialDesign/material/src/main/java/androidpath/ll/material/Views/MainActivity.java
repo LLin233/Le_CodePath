@@ -1,12 +1,14 @@
 package androidpath.ll.material.Views;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private FragmentStatePagerAdapter mPagerAdapter;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+
     FloatingActionMenu actionMenu;
     FloatingActionButton actionButton;
 
@@ -46,24 +51,76 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
-
-        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
-        viewPager.setAdapter(mPagerAdapter);
+        setUpToolBar();
+        setUpDrawer();
+        setUpTab();
         setUpTabLayoutIconTop(viewPager);
         setUpFloatActionMenu();
-
-
     }
 
     private void init() {
-
         animationFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        setUpToolBar();
-        setUpDrawer();
+    }
+
+    private void setUpTab() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(mPagerAdapter);
+    }
+
+    private void setUpToolBar() {
+        mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        mToolbar.setTitle("Moooo");
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+    }
+
+    private void setUpDrawer() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close
+        ) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                actionButton.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                animationFadeIn.setDuration((long) drawerView.getScrollBarFadeDuration());
+                actionButton.startAnimation(animationFadeIn);
+                actionButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                actionButton.setAlpha(1 - slideOffset);  //slideOffset is 0 (drawer closed) to 1 (drawer opened).
+            }
+
+        };
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
 
@@ -73,17 +130,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         actionButton = new FloatingActionButton.Builder(this)
                 .setContentView(floatButtonImageView)
-                .setBackgroundDrawable(R.drawable.float_button_red)
+                .setBackgroundDrawable(R.mipmap.button_action_red)
                 .build();
 
         ImageView iconSortName = new ImageView(this); // Create an icon
-        iconSortName.setImageResource(R.drawable.ic_action_alphabets);
+        iconSortName.setImageResource(R.mipmap.ic_action_alphabets);
 
         ImageView iconSortDate = new ImageView(this); // Create an icon
-        iconSortDate.setImageResource(R.drawable.ic_action_calendar);
+        iconSortDate.setImageResource(R.mipmap.ic_action_calendar);
 
         ImageView iconSortRating = new ImageView(this); // Create an icon
-        iconSortRating.setImageResource(R.drawable.ic_action_important);
+        iconSortRating.setImageResource(R.mipmap.ic_action_important);
 
         //set up sub buttons
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
@@ -143,43 +200,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return tab;
     }
 
-    private void setUpDrawer() {
-        DrawerLayout drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-
-        drawer_layout.setDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                actionButton.setAlpha(1 - slideOffset);  //slideOffset is 0 (drawer closed) to 1 (drawer opened).
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                actionButton.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-                animationFadeIn.setDuration((long) drawerView.getScrollBarFadeDuration());
-                actionButton.startAnimation(animationFadeIn);
-                actionButton.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-
-    }
-
-    private void setUpToolBar() {
-        mToolbar = (Toolbar) findViewById(R.id.app_bar);
-        mToolbar.setTitle("Moooo");
-        setSupportActionBar(mToolbar);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -191,6 +211,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.

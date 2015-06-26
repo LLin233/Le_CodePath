@@ -19,7 +19,7 @@ import android.view.ViewGroup;
  */
 public class NavigationDrawerFragment extends Fragment {
 
-    private static final String PREF_FILE_NAME = "testpref";
+
     public static final String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
 
     private ActionBarDrawerToggle mDrawerToogle;
@@ -90,6 +90,9 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
     }
+
+
+
 
     public static void saveToPreferences(Context context, String preferenceName, boolean preferenceValue) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
