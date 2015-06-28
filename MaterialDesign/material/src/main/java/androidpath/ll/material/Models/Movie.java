@@ -1,18 +1,33 @@
 package androidpath.ll.material.Models;
 
 import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.util.SQLiteUtils;
 
 import java.util.Date;
 
 /**
  * Created by Le on 2015/6/17.
  */
-public class Movie {
-    private long id;
+
+
+@Table(name = "Movies")
+public class Movie extends Model implements Parcelable {
+    @Column(name = "movieID", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    private long movieId;
+    @Column(name = "title")
     private String title;
+    @Column(name = "releaseDateTheater")
     private Date releaseDateTheater;
+    @Column(name = "audienceScore")
     private int audienceScore;
+    @Column(name = "synopsis")
     private String synopsis;
+    @Column(name = "urlThumbnail")
     private String urlThumbnail;
     private String urlSelf;
     private String urlCast;
@@ -21,12 +36,12 @@ public class Movie {
 
 
     public Movie() {
-
+        super();
     }
 
 
     public Movie(Parcel input) {
-        id = input.readLong();
+        movieId = input.readLong();
         title = input.readString();
         long dateMillis = input.readLong();
         releaseDateTheater = (dateMillis == -1 ? null : new Date(dateMillis));
@@ -39,7 +54,7 @@ public class Movie {
         urlSimilar = input.readString();
     }
 
-    public Movie(long id,
+    public Movie(long movieId,
                  String title,
                  Date releaseDateTheater,
                  int audienceScore,
@@ -49,7 +64,7 @@ public class Movie {
                  String urlCast,
                  String urlReviews,
                  String urlSimilar) {
-        this.id = id;
+        this.movieId = movieId;
         this.title = title;
         this.releaseDateTheater = releaseDateTheater;
         this.audienceScore = audienceScore;
@@ -62,12 +77,12 @@ public class Movie {
     }
 
 
-    public long getId() {
-        return id;
+    public long getMovieId() {
+        return movieId;
     }
 
-    public Movie setId(long id) {
-        this.id = id;
+    public Movie setMovieId(long movieId) {
+        this.movieId = movieId;
         return this;
     }
 
@@ -154,10 +169,47 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "ID: " + id + "\n"
+        return "ID: " + movieId + "\n"
                 + "Title: " + title + "\n"
                 + "Synopsis: " + synopsis + "\n"
                 + "Audience Score: " + audienceScore + "\n"
-                + "Thumbnail: " + urlThumbnail;
+                + "Thumbnail: " + urlThumbnail + "\n"
+                + "Date: " + getReleaseDateTheater().getTime();
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(movieId);
+        dest.writeString(title);
+        dest.writeLong(releaseDateTheater == null ? -1 : releaseDateTheater.getTime());
+        dest.writeInt(audienceScore);
+        dest.writeString(synopsis);
+        dest.writeString(urlThumbnail);
+        dest.writeString(urlSelf);
+        dest.writeString(urlCast);
+        dest.writeString(urlReviews);
+        dest.writeString(urlSimilar);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR
+            = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+
+    public static void clearData() {
+        SQLiteUtils.execSql("DELETE FROM Movies");
+    }
+
 }
