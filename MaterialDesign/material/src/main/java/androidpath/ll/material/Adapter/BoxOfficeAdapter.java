@@ -31,7 +31,7 @@ public class BoxOfficeAdapter extends RecyclerView.Adapter<BoxOfficeAdapter.BoxO
     private ArrayList<Movie> listMovies = new ArrayList<>();
     private VolleySingleton mVolleySingleton;
     private ImageLoader mImageLoader;
-    private DateFormat mDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+    private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public BoxOfficeAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
