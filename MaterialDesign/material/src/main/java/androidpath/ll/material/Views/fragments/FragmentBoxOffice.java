@@ -14,39 +14,26 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response.Listener;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import androidpath.ll.material.Adapter.BoxOfficeAdapter;
 import androidpath.ll.material.Models.Movie;
 import androidpath.ll.material.R;
 import androidpath.ll.material.Utils.DBHelper;
-import androidpath.ll.material.Utils.JSON.Parser;
 import androidpath.ll.material.Utils.JSON.RequestBoxOffice;
 import androidpath.ll.material.Utils.MovieSorter;
+import androidpath.ll.material.interfaces.BoxOfficeMoviesLoadedCallback;
 import androidpath.ll.material.interfaces.SortListener;
-import androidpath.ll.material.network.VolleySingleton;
-
-import static androidpath.ll.material.Utils.RottenTomatoesClient.getInstance;
-import static com.android.volley.Response.ErrorListener;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FragmentBoxOffice#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentBoxOffice extends Fragment implements SortListener {
+public class FragmentBoxOffice extends Fragment implements SortListener, BoxOfficeMoviesLoadedCallback {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -55,11 +42,7 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private VolleySingleton mVolleySingleton;
-    private ImageLoader mImageLoader;
-    private RequestQueue mRequestQueue;
-    private DateFormat dateFormat;
-    private ArrayList<Movie> listMovies;
+    private ArrayList<Movie> mListMovies;
     private MovieSorter mMovieSorter;
     private DBHelper mDBHelper;
 
@@ -95,18 +78,13 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //save movieList here so data won't reload without order when orientation has been changed
-        outState.putParcelableArrayList(STATE_MOVIES, listMovies);
+        outState.putParcelableArrayList(STATE_MOVIES, mListMovies);
     }
 
     private void init() {
-        listMovies = new ArrayList<>();
-        dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        mListMovies = new ArrayList<>();
         mMovieSorter = new MovieSorter();
         mDBHelper = new DBHelper();
-        //request data via network
-        mVolleySingleton = VolleySingleton.getInstance();
-        mRequestQueue = mVolleySingleton.getRequestQueue();
-
     }
 
     @Override
@@ -117,28 +95,6 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         init();
-        new RequestBoxOffice(getActivity()).execute();
-    }
-
-    private void sendJsonRequest() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                getInstance().getRequestUrl(30),
-                new Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        errorMessage.setVisibility(View.GONE);
-                        listMovies = Parser.parseMoviesJSON(response);
-                        mDBHelper.insertMoviesBoxOffice(listMovies, true);
-                        mBoxOfficeAdapter.setMovieList(listMovies);
-                    }
-                }, new ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                handleVolleyError(error);
-            }
-        });
-        mRequestQueue.add(request);
-
     }
 
 
@@ -171,41 +127,53 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_box_office, container, false);
         errorMessage = (TextView) view.findViewById(R.id.textVolleyError);
+
         mRecyclerViewMovieList = (RecyclerView) view.findViewById(R.id.listMovieHits);
         mRecyclerViewMovieList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBoxOfficeAdapter = new BoxOfficeAdapter(getActivity());
         mRecyclerViewMovieList.setAdapter(mBoxOfficeAdapter);
+
         if (savedInstanceState != null) {
-            listMovies = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
+            mListMovies = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
         } else {
-            listMovies = (ArrayList<Movie>) mDBHelper.getAll();
-            //request data only when app started and no data in db
-//            if (listMovies.isEmpty()) {
-//                sendJsonRequest();
-//            }
+            mListMovies = (ArrayList<Movie>) mDBHelper.getAll();
+            if (mListMovies.isEmpty()) {
+                //start an AsyncTask to request latest data when app started and nothing on Database
+                //TODO refrash data by user
+                new RequestBoxOffice(getActivity(), this).execute();
+            }
         }
 
-        mBoxOfficeAdapter.setMovieList(listMovies);
+        mBoxOfficeAdapter.setMovieList(mListMovies);
         return view;
     }
 
 
-    //this method will be call before onCreateView(), to avoid nullException, instantiateItem before consuming this event
     @Override
     public void onSortByName() {
-        mMovieSorter.sortMoviesByName(listMovies);
+        mMovieSorter.sortMoviesByName(mListMovies);
         mBoxOfficeAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onSortByDate() {
-        mMovieSorter.sortMoviesByDate(listMovies);
+        mMovieSorter.sortMoviesByDate(mListMovies);
         mBoxOfficeAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onSortByRating() {
-        mMovieSorter.sortMoviesByRating(listMovies);
+        mMovieSorter.sortMoviesByRating(mListMovies);
         mBoxOfficeAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * Called when the AsyncTask finishes load the list of movies from the web
+     */
+    @Override
+    public void onBoxOfficeMoviesLoaded(ArrayList<Movie> listMovies) {
+        mBoxOfficeAdapter.setMovieList(listMovies);
+        mListMovies = listMovies;
     }
 }
