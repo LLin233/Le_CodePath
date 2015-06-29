@@ -1,5 +1,6 @@
 package androidpath.ll.material.Views;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -20,6 +21,8 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+import java.text.SimpleDateFormat;
+
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
 import androidpath.ll.material.Views.fragments.NavigationDrawerFragment;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG_SORT_NAME = "sortName";
     private static final String TAG_SORT_DATE = "sortDate";
     private static final String TAG_SORT_Rating = "sortRating";
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 
     private Toolbar mToolbar;
     private TabLayout tabLayout;
@@ -46,9 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpToolBar();
+        setUpTab();
         setUpFloatActionMenu();
         setUpDrawer();
-        setUpTab();
+        elevate();
         setUpTabLayoutIconTop(viewPager);
 
     }
@@ -60,9 +65,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewPager.setAdapter(mPagerAdapter);
     }
 
+    @TargetApi(21)
+    private void elevate() {
+        getSupportActionBar().setElevation(10);
+        tabLayout.setElevation(5);
+    }
+
     private void setUpToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         mToolbar.setTitle("Moooo");
+        mToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
