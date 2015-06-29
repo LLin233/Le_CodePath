@@ -18,29 +18,30 @@ import java.util.concurrent.TimeoutException;
 import androidpath.ll.material.Models.Movie;
 import androidpath.ll.material.Utils.DBHelper;
 import androidpath.ll.material.Utils.RottenTomatoesClient;
+import androidpath.ll.material.interfaces.BoxOfficeMoviesLoadedCallback;
 import androidpath.ll.material.network.VolleySingleton;
 
 /**
  * Created by Le on 2015/6/29.
  */
-public class RequestBoxOffice extends AsyncTask<Void, Void, Boolean> {
+public class RequestBoxOffice extends AsyncTask<Void, Void, ArrayList<Movie>> {
 
     private VolleySingleton mVolleySingleton;
     private RequestQueue mRequestQueue;
-    private ArrayList<Movie> mListMovies;
+    private BoxOfficeMoviesLoadedCallback mCallback;
     private DBHelper mDBHelper;
     private Context mContext;
 
-    public RequestBoxOffice(Context context) {
+    public RequestBoxOffice(Context context, BoxOfficeMoviesLoadedCallback callback) {
         mContext = context;
+        mCallback = callback;
         mVolleySingleton = VolleySingleton.getInstance();
         mRequestQueue = mVolleySingleton.getRequestQueue();
         mDBHelper = new DBHelper();
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
-
+    protected ArrayList<Movie> doInBackground(Void... params) {
         JSONObject response = null;
         final RequestFuture<JSONObject> requestFuture = RequestFuture.newFuture();
         JsonObjectRequest request = new JsonObjectRequest(
@@ -54,18 +55,22 @@ public class RequestBoxOffice extends AsyncTask<Void, Void, Boolean> {
             response = requestFuture.get(30000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
-            return false;
         }
 
-        mListMovies = Parser.parseMoviesJSON(response);
+        ArrayList<Movie> mListMovies = Parser.parseMoviesJSON(response);
         mDBHelper.insertMoviesBoxOffice(mListMovies, true);
-        return true;
+        return mListMovies;
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
-        if (!result) {
+    protected void onPostExecute(ArrayList<Movie> result) {
+        if (result.isEmpty()) {
             Toast.makeText(mContext, "Network is not working", Toast.LENGTH_SHORT).show();
+        } else if (mCallback != null) {
+            mCallback.onBoxOfficeMoviesLoaded(result);
+            Toast.makeText(mContext, "Data loading completed ", Toast.LENGTH_SHORT).show();
         }
+
     }
+
 }
