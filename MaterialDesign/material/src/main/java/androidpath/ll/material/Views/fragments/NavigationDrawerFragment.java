@@ -100,16 +100,19 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getActivity().invalidateOptionsMenu();
+                actionButton.setClickable(false);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 getActivity().invalidateOptionsMenu();
+                actionButton.setClickable(true);
             }
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
+
                 super.onDrawerSlide(drawerView, slideOffset);
                 if (actionMenu.isOpen()) {
                     actionMenu.close(true);
@@ -130,7 +133,6 @@ public class NavigationDrawerFragment extends Fragment {
             public void run() {
                 mDrawerToggle.syncState();
                 if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-                    mDrawerLayout.openDrawer(containerView);
                     mUserLearnedDrawer = true;
                     saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer);
                 }
