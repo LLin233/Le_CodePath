@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="androidpath.ll.material"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="androidpath.ll.material"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -10,6 +11,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="movie_material"/>
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1"/>
+
         <activity
             android:name=".Views.MainActivity"
             android:label="@string/app_name">
