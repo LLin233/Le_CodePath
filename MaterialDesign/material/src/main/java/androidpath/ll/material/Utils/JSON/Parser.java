@@ -29,7 +29,7 @@ import static androidpath.ll.material.Models.AppConstants.EndpointBoxOffice.KEY_
 import static androidpath.ll.material.Models.AppConstants.EndpointBoxOffice.KEY_THEATER;
 import static androidpath.ll.material.Models.AppConstants.EndpointBoxOffice.KEY_THUMBNAIL;
 import static androidpath.ll.material.Models.AppConstants.EndpointBoxOffice.KEY_TITLE;
-import static androidpath.ll.material.Utils.Utils.contains;
+import static androidpath.ll.material.Utils.Utils.jsonContains;
 
 /**
  * Created by Le on 2015/6/27.
@@ -54,61 +54,61 @@ public class Parser {
                     String urlSimilar = Constants.NA;
                     JSONObject currentMovie = arrayMovies.getJSONObject(i);
                     //get the id of the current movie
-                    if (contains(currentMovie, KEY_ID)) {
+                    if (jsonContains(currentMovie, KEY_ID)) {
                         id = currentMovie.getLong(KEY_ID);
                     }
                     //get the title of the current movie
-                    if (contains(currentMovie, KEY_TITLE)) {
+                    if (jsonContains(currentMovie, KEY_TITLE)) {
                         title = currentMovie.getString(KEY_TITLE);
                     }
 
 
                     //get the date in theaters for the current movie
-                    if (contains(currentMovie, KEY_RELEASE_DATES)) {
+                    if (jsonContains(currentMovie, KEY_RELEASE_DATES)) {
                         JSONObject objectReleaseDates = currentMovie.getJSONObject(KEY_RELEASE_DATES);
 
 
-                        if (contains(objectReleaseDates, KEY_THEATER)) {
+                        if (jsonContains(objectReleaseDates, KEY_THEATER)) {
                             releaseDate = objectReleaseDates.getString(KEY_THEATER);
                         }
                     }
 
                     //get the audience score for the current movie
 
-                    if (contains(currentMovie, KEY_RATINGS)) {
+                    if (jsonContains(currentMovie, KEY_RATINGS)) {
                         JSONObject objectRatings = currentMovie.getJSONObject(KEY_RATINGS);
-                        if (contains(objectRatings, KEY_AUDIENCE_SCORE)) {
+                        if (jsonContains(objectRatings, KEY_AUDIENCE_SCORE)) {
                             audienceScore = objectRatings.getInt(KEY_AUDIENCE_SCORE);
                         }
                     }
 
                     // get the synopsis of the current movie
-                    if (contains(currentMovie, KEY_SYNOPSIS)) {
+                    if (jsonContains(currentMovie, KEY_SYNOPSIS)) {
                         synopsis = currentMovie.getString(KEY_SYNOPSIS);
                     }
 
                     //get the url for the thumbnail to be displayed inside the current movie result
-                    if (contains(currentMovie, KEY_POSTERS)) {
+                    if (jsonContains(currentMovie, KEY_POSTERS)) {
                         JSONObject objectPosters = currentMovie.getJSONObject(KEY_POSTERS);
 
-                        if (contains(objectPosters, KEY_THUMBNAIL)) {
+                        if (jsonContains(objectPosters, KEY_THUMBNAIL)) {
                             urlThumbnail = objectPosters.getString(KEY_THUMBNAIL);
                         }
                     }
 
                     //get the url of the related links
-                    if (contains(currentMovie, KEY_LINKS)) {
+                    if (jsonContains(currentMovie, KEY_LINKS)) {
                         JSONObject objectLinks = currentMovie.getJSONObject(KEY_LINKS);
-                        if (contains(objectLinks, KEY_SELF)) {
+                        if (jsonContains(objectLinks, KEY_SELF)) {
                             urlSelf = objectLinks.getString(KEY_SELF);
                         }
-                        if (contains(objectLinks, KEY_CAST)) {
+                        if (jsonContains(objectLinks, KEY_CAST)) {
                             urlCast = objectLinks.getString(KEY_CAST);
                         }
-                        if (contains(objectLinks, KEY_REVIEWS)) {
+                        if (jsonContains(objectLinks, KEY_REVIEWS)) {
                             urlReviews = objectLinks.getString(KEY_REVIEWS);
                         }
-                        if (contains(objectLinks, KEY_SIMILAR)) {
+                        if (jsonContains(objectLinks, KEY_SIMILAR)) {
                             urlSimilar = objectLinks.getString(KEY_SIMILAR);
                         }
                     }
