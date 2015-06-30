@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
 import androidpath.ll.material.Utils.SDKVersionUtil;
-import androidpath.ll.material.Views.fragments.NavigationDrawerFragment;
+import androidpath.ll.material.Views.fragments.FragmentNavigationDrawer;
 import androidpath.ll.material.interfaces.SortListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.sliding_tabs)
     TabLayout tabLayout;
     @Bind(R.id.viewpager)
-    ViewPager viewPager;
+    ViewPager mViewPager;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
@@ -66,13 +66,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (SDKVersionUtil.isLolipopOrGreater()) {
             elevate();
         }
-        setUpTabLayoutIconTop(viewPager);
+        setUpTabLayoutIconTop(mViewPager);
 
     }
 
     private void setUpTab() {
         mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
-        viewPager.setAdapter(mPagerAdapter);
+        mViewPager.setAdapter(mPagerAdapter);
     }
 
     @TargetApi(21)
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUpDrawer() {
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        FragmentNavigationDrawer drawerFragment = (FragmentNavigationDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, mDrawerLayout, mToolbar, actionButton, actionMenu);
     }
 
@@ -139,9 +139,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setUpTabLayoutIconTop(ViewPager viewPager) {
 
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setCustomView(getTabView("TAB1", R.drawable.ic_action_home));
-        tabLayout.getTabAt(1).setCustomView(getTabView("TAB2", R.drawable.ic_action_personal));
-        tabLayout.getTabAt(2).setCustomView(getTabView("TAB3", R.drawable.ic_action_articles));
+        tabLayout.getTabAt(0).setCustomView(getTabView("TAB1", R.drawable.ic_action_search));
+        tabLayout.getTabAt(1).setCustomView(getTabView("TAB2", R.drawable.ic_action_trending));
+        tabLayout.getTabAt(2).setCustomView(getTabView("TAB3", R.drawable.ic_action_upcoming));
     }
 
     private View getTabView(String tabText, int iconId) {
@@ -154,6 +154,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         title.setCompoundDrawables(null, image, null, null);
         title.setText(tabText);
         return view;
+    }
+
+
+    public void onDrawerItemClicked(int index) {
+        mViewPager.setCurrentItem(index);
     }
 
     @Override
@@ -190,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         //this method will be call before onCreateView(), to avoid nullException, instantiateItem before consuming this event
-        Fragment fragment = (Fragment) mPagerAdapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+        Fragment fragment = (Fragment) mPagerAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
         if (fragment instanceof SortListener) {
             switch (v.getTag().toString()) {
                 //TODO use eventbus to handle event
