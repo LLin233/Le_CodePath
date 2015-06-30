@@ -2,6 +2,7 @@ package androidpath.ll.material.Views;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -141,9 +142,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private View getTabView(String tabText, int iconId) {
         View view = LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        ImageView icon = ((ImageView) view.findViewById(R.id.tabIcon));
-        icon.setImageResource(iconId);
         TextView title = ((TextView) view.findViewById(R.id.tabText));
+        Drawable image = getResources().getDrawable(iconId);
+        int h = image.getIntrinsicHeight();
+        int w = image.getIntrinsicWidth();
+        image.setBounds( 0, 0, w, h ); //can't show those icon without setting bounds for image
+        title.setCompoundDrawables(null, image, null, null);
         title.setText(tabText);
         return view;
     }
