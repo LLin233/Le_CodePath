@@ -19,8 +19,10 @@ import butterknife.ButterKnife;
 /**
  * Created by Le on 2015/6/10.
  */
-public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.ViewHolder> {
+public class DrawerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
     private Context context;
     private LayoutInflater mInflater;
 
@@ -40,38 +42,65 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
 
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.drawer_list_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder holder;
+
+        if (viewType == TYPE_HEADER) {
+            View view = mInflater.inflate(R.layout.drawer_header, parent, false);
+            holder = new HeaderHolder(view);
+        } else {
+            View view = mInflater.inflate(R.layout.drawer_list_item, parent, false);
+            holder = new ItemHolder(view);
+        }
+
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        DrawerItem item = data.get(position);
-        holder.title.setText(item.getTitle());
-        holder.icon.setImageResource(item.getIconId());
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        if (holder instanceof HeaderHolder) {
+
+        } else {
+            ItemHolder mItemHolder = (ItemHolder) holder;
+            //position 0 is for header
+            DrawerItem item = data.get(position - 1);
+            mItemHolder.title.setText(item.getTitle());
+            mItemHolder.icon.setImageResource(item.getIconId());
+        }
+
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return TYPE_HEADER;
+        } else {
+            return TYPE_ITEM;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.size() + 1;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ItemHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.drawer_item_title)
         TextView title;
         @Bind(R.id.drawer_item_icon)
         ImageView icon;
 
-        public ViewHolder(View itemView) {
+        public ItemHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
         }
+    }
 
-        @Override
-        public void onClick(View v) {
+    class HeaderHolder extends RecyclerView.ViewHolder {
+        public HeaderHolder(View itemView) {
+            super(itemView);
         }
     }
 
