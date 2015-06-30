@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
+import androidpath.ll.material.Utils.SDKVersionUtil;
 import androidpath.ll.material.Views.fragments.NavigationDrawerFragment;
 import androidpath.ll.material.interfaces.SortListener;
 
@@ -49,11 +50,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpToolBar();
         setUpTab();
+        setUpToolBar();
         setUpFloatActionMenu();
         setUpDrawer();
-        elevate();
+        if (SDKVersionUtil.isLolipopOrGreater()) {
+            elevate();
+        }
         setUpTabLayoutIconTop(viewPager);
 
     }
@@ -67,14 +70,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @TargetApi(21)
     private void elevate() {
-        getSupportActionBar().setElevation(10);
+        getSupportActionBar().setElevation(15);
         tabLayout.setElevation(5);
     }
 
     private void setUpToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         mToolbar.setTitle("Moooo");
-        mToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -179,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //handle float action button onClickEvent
     @Override
     public void onClick(View v) {
+        //this method will be call before onCreateView(), to avoid nullException, instantiateItem before consuming this event
         Fragment fragment = (Fragment) mPagerAdapter.instantiateItem(viewPager, viewPager.getCurrentItem());
         if (fragment instanceof SortListener) {
             switch (v.getTag().toString()) {
