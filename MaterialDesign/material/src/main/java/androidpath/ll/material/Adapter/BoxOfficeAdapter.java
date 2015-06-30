@@ -22,6 +22,8 @@ import androidpath.ll.material.Models.Movie;
 import androidpath.ll.material.R;
 import androidpath.ll.material.Utils.AnimationUtils;
 import androidpath.ll.material.network.VolleySingleton;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Le on 2015/6/17.
@@ -119,18 +121,18 @@ public class BoxOfficeAdapter extends RecyclerView.Adapter<BoxOfficeAdapter.BoxO
 
     static class BoxOfficeViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView movieThumbnail;
-        private TextView movieTitle;
-        private TextView movieReleaseDate;
-        private RatingBar movieAudienceScore;
+        @Bind(R.id.movieThumbnail)
+        ImageView movieThumbnail;
+        @Bind(R.id.movieTitle)
+        TextView movieTitle;
+        @Bind(R.id.movieReleaseDate)
+        TextView movieReleaseDate;
+        @Bind(R.id.movieAudienceScore)
+        RatingBar movieAudienceScore;
 
         public BoxOfficeViewHolder(View itemView) {
             super(itemView);
-            movieThumbnail = (ImageView) itemView.findViewById(R.id.movieThumbnail);
-            movieTitle = (TextView) itemView.findViewById(R.id.movieTitle);
-            movieReleaseDate = (TextView) itemView.findViewById(R.id.movieReleaseDate);
-            movieAudienceScore = (RatingBar) itemView.findViewById(R.id.movieAudienceScore);
-
+            ButterKnife.bind(this, itemView);
         }
     }
 

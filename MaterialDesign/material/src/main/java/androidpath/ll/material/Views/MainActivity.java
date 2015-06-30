@@ -29,6 +29,8 @@ import androidpath.ll.material.R;
 import androidpath.ll.material.Utils.SDKVersionUtil;
 import androidpath.ll.material.Views.fragments.NavigationDrawerFragment;
 import androidpath.ll.material.interfaces.SortListener;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -38,12 +40,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG_SORT_Rating = "sortRating";
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 
-    private Toolbar mToolbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private FragmentStatePagerAdapter mPagerAdapter;
-    private DrawerLayout mDrawerLayout;
+    @Bind(R.id.app_bar)
+    Toolbar mToolbar;
+    @Bind(R.id.sliding_tabs)
+    TabLayout tabLayout;
+    @Bind(R.id.viewpager)
+    ViewPager viewPager;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
 
+    private FragmentStatePagerAdapter mPagerAdapter;
     FloatingActionMenu actionMenu;
     FloatingActionButton actionButton;
 
@@ -51,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         setUpTab();
         setUpToolBar();
         setUpFloatActionMenu();
@@ -63,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUpTab() {
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(mPagerAdapter);
     }
@@ -76,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUpToolBar() {
-        mToolbar = (Toolbar) findViewById(R.id.app_bar);
         mToolbar.setTitle("Moooo");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -85,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUpDrawer() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, mDrawerLayout, mToolbar, actionButton, actionMenu);
     }
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Drawable image = getResources().getDrawable(iconId);
         int h = image.getIntrinsicHeight();
         int w = image.getIntrinsicWidth();
-        image.setBounds( 0, 0, w, h ); //can't show those icon without setting bounds for image
+        image.setBounds(0, 0, w, h); //can't show those icon without setting bounds for image
         title.setCompoundDrawables(null, image, null, null);
         title.setText(tabText);
         return view;

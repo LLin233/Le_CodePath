@@ -13,6 +13,8 @@ import java.util.List;
 
 import androidpath.ll.material.Models.DrawerItem;
 import androidpath.ll.material.R;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Le on 2015/6/10.
@@ -56,15 +58,16 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Vi
         return data.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @Bind(R.id.drawer_item_title)
         TextView title;
+        @Bind(R.id.drawer_item_icon)
         ImageView icon;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
-            title = (TextView) itemView.findViewById(R.id.drawer_item_title);
-            icon = (ImageView) itemView.findViewById(R.id.drawer_item_icon);
         }
 
         @Override

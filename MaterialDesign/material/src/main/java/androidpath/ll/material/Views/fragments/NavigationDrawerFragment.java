@@ -29,6 +29,8 @@ import java.util.List;
 import androidpath.ll.material.Adapter.DrawerListAdapter;
 import androidpath.ll.material.Models.DrawerItem;
 import androidpath.ll.material.R;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
@@ -52,7 +54,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private RecyclerView mRecyclerView;
+    @Bind(R.id.drawerList)
+    RecyclerView mRecyclerView;
     private RecyclerTouchListener mRecyclerTouchListener;
 
     private View containerView;
@@ -78,13 +81,11 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
+        ButterKnife.bind(this, layout);
         mDrawerListAdapter = new DrawerListAdapter(getActivity(), getData());
-
         mRecyclerView.setAdapter(mDrawerListAdapter);
         mRecyclerTouchListener = setUpRecyclerTouchListener();
         mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return layout;
