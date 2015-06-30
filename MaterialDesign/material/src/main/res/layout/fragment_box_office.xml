@@ -4,20 +4,27 @@
              android:layout_height="match_parent"
              tools:context="androidpath.ll.material.Views.fragments.FragmentBoxOffice">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/listMovieHits"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorTable"
-        />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textVolleyError"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="@dimen/size_word"
-        android:visibility="gone"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listMovieHits"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorTable"
+            />
+
+        <TextView
+            android:id="@+id/textVolleyError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/size_word"
+            android:visibility="gone"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </FrameLayout>
