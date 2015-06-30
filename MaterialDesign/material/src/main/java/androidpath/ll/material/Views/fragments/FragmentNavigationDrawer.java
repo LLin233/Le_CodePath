@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import java.util.List;
 import androidpath.ll.material.Adapter.DrawerListAdapter;
 import androidpath.ll.material.Models.DrawerItem;
 import androidpath.ll.material.R;
+import androidpath.ll.material.Views.MainActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -46,7 +48,7 @@ import butterknife.ButterKnife;
  * 9 Add the onItemTouchListener object for our RecyclerView that uses our class created in step 1
  */
 
-public class NavigationDrawerFragment extends Fragment {
+public class FragmentNavigationDrawer extends Fragment {
 
     final String TAG = "LLin";
 
@@ -65,7 +67,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
 
-    public NavigationDrawerFragment() {
+    public FragmentNavigationDrawer() {
         // Required empty public constructor
     }
 
@@ -84,9 +86,9 @@ public class NavigationDrawerFragment extends Fragment {
         ButterKnife.bind(this, layout);
         mDrawerListAdapter = new DrawerListAdapter(getActivity(), getData());
         mRecyclerView.setAdapter(mDrawerListAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerTouchListener = setUpRecyclerTouchListener();
         mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return layout;
     }
@@ -149,26 +151,19 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 
-    public static List<DrawerItem> getData() {
+    public List<DrawerItem> getData() {
         List<DrawerItem> drawerItems = new ArrayList<DrawerItem>();
         int[] icons = {
-                R.drawable.ic_number1,
-                R.drawable.ic_number2,
-                R.drawable.ic_number3,
-                R.drawable.ic_number4
+                R.drawable.ic_action_search_orange,
+                R.drawable.ic_action_trending_orange,
+                R.drawable.ic_action_upcoming_orange
         };
-        String[] titles = {
-                "Hello",
-                "Leonard",
-                "Inbox",
-                "Events"
-        };
+        String[] titles = getResources().getStringArray(R.array.drawer_items);
 
-        //for (int i = 0; i < titles.length && i < icons.length; i++)
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < titles.length && i < icons.length; i++) {
             DrawerItem item = new DrawerItem();
-            item.setIconId(icons[i % icons.length]);
-            item.setTitle(titles[i % titles.length]);
+            item.setIconId(icons[i]);
+            item.setTitle(titles[i]);
             drawerItems.add(item);
         }
 
@@ -192,7 +187,8 @@ public class NavigationDrawerFragment extends Fragment {
         RecyclerTouchListener recyclerTouchListener = new RecyclerTouchListener(getActivity(), mRecyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int postion) {
-                Toast.makeText(getActivity(), "onClick " + postion, Toast.LENGTH_SHORT).show();
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                ((MainActivity) getActivity()).onDrawerItemClicked(postion - 1);
             }
 
             @Override
