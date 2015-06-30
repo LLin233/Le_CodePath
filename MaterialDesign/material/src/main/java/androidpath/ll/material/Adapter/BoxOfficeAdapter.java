@@ -20,6 +20,7 @@ import java.util.Date;
 import androidpath.ll.material.Models.AppConstants;
 import androidpath.ll.material.Models.Movie;
 import androidpath.ll.material.R;
+import androidpath.ll.material.Utils.AnimationUtils;
 import androidpath.ll.material.network.VolleySingleton;
 
 /**
@@ -32,6 +33,7 @@ public class BoxOfficeAdapter extends RecyclerView.Adapter<BoxOfficeAdapter.BoxO
     private VolleySingleton mVolleySingleton;
     private ImageLoader mImageLoader;
     private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private int previousPosition = 0;
 
     public BoxOfficeAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -70,6 +72,15 @@ public class BoxOfficeAdapter extends RecyclerView.Adapter<BoxOfficeAdapter.BoxO
             holder.movieAudienceScore.setRating(audienceScore / 20.0f);
             holder.movieAudienceScore.setAlpha(1.0f);
         }
+
+        if (position > previousPosition) {
+            //scroll down
+            AnimationUtils.animate(holder, true);
+        } else {
+            //scroll up
+            AnimationUtils.animate(holder, false);
+        }
+        previousPosition = position;
 
         String urlThumnail = movie.getUrlThumbnail();
         loadPoster(urlThumnail, holder);
