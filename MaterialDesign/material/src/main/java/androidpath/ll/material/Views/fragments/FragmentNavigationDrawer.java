@@ -21,9 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +91,7 @@ public class FragmentNavigationDrawer extends Fragment {
     }
 
 
-    public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar, final FloatingActionButton actionButton, final FloatingActionMenu actionMenu) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
 
         containerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
@@ -102,31 +99,23 @@ public class FragmentNavigationDrawer extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getActivity().invalidateOptionsMenu();
-                actionButton.setClickable(false);
+                getActivity().supportInvalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getActivity().invalidateOptionsMenu();
-                actionButton.setClickable(true);
+                getActivity().supportInvalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
 
                 super.onDrawerSlide(drawerView, slideOffset);
-                if (actionMenu.isOpen()) {
-                    actionMenu.close(true);
-                }
-
                 if (slideOffset < 0.6) {
                     toolbar.setAlpha(1 - slideOffset);
-                    actionButton.setAlpha(1 - slideOffset);
                 }
-
-
+                ((MainActivity) getActivity()).onDrawerSlide(slideOffset);
             }
         };
 

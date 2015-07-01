@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     DrawerLayout mDrawerLayout;
 
     private FragmentStatePagerAdapter mPagerAdapter;
-    FloatingActionMenu actionMenu;
-    FloatingActionButton actionButton;
+    private FloatingActionMenu mFloatingActionMenu;
+    private FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,18 +91,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setUpDrawer() {
         FragmentNavigationDrawer drawerFragment = (FragmentNavigationDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, mDrawerLayout, mToolbar, actionButton, actionMenu);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, mDrawerLayout, mToolbar);
     }
 
     private void setUpFloatActionMenu() {
+
+        //set main floating action button along with icon
         ImageView floatButtonImageView = new ImageView(this); // Create an icon
         floatButtonImageView.setImageResource(R.drawable.ic_action_new);
-
-        actionButton = new FloatingActionButton.Builder(this)
+        mFloatingActionButton = new FloatingActionButton.Builder(this)
                 .setContentView(floatButtonImageView)
                 .setBackgroundDrawable(R.mipmap.button_action_red)
                 .build();
 
+        //set up sub buttons
         ImageView iconSortName = new ImageView(this); // Create an icon
         iconSortName.setImageResource(R.mipmap.ic_action_alphabets);
 
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageView iconSortRating = new ImageView(this); // Create an icon
         iconSortRating.setImageResource(R.mipmap.ic_action_important);
 
-        //set up sub buttons
+        //Attach sub buttons to main floating action button
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         itemBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.float_button_subs));
 
@@ -128,13 +130,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSortByDate.setOnClickListener(this);
         btnSortByRating.setOnClickListener(this);
 
-        actionMenu = new FloatingActionMenu.Builder(this)
+        mFloatingActionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(btnSortByName)
                 .addSubActionView(btnSortByDate)
                 .addSubActionView(btnSortByRating)
-                .attachTo(actionButton)
+                .attachTo(mFloatingActionButton)
                 .build();
     }
+
+    private void translateFloatingActionButton(float slideOffset) {
+        if (mFloatingActionMenu != null) {
+            if (mFloatingActionMenu.isOpen()) {
+                mFloatingActionMenu.close(true);
+            }
+            mFloatingActionButton.setTranslationX(slideOffset * 400);
+        }
+    }
+
+    public void onDrawerSlide(float slideOffset) {
+        translateFloatingActionButton(slideOffset);
+    }
+
 
     private void setUpTabLayoutIconTop(ViewPager viewPager) {
 
@@ -148,10 +164,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View view = LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         TextView title = ((TextView) view.findViewById(R.id.tabText));
         Drawable image = getResources().getDrawable(iconId);
-        int h = image.getIntrinsicHeight();
-        int w = image.getIntrinsicWidth();
-        image.setBounds(0, 0, w, h); //can't show those icon without setting bounds for image
-        title.setCompoundDrawables(null, image, null, null);
+        if (image != null) {
+            int h = image.getIntrinsicHeight();
+            int w = image.getIntrinsicWidth();
+            image.setBounds(0, 0, w, h); //can't show those icon without setting bounds for image
+            title.setCompoundDrawables(null, image, null, null);
+        }
         title.setText(tabText);
         return view;
     }
