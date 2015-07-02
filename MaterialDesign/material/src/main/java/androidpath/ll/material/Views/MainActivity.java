@@ -22,8 +22,6 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
-import java.text.SimpleDateFormat;
-
 import androidpath.ll.material.Adapter.MyPagerAdapter;
 import androidpath.ll.material.R;
 import androidpath.ll.material.Utils.SDKVersionUtil;
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG_SORT_NAME = "sortName";
     private static final String TAG_SORT_DATE = "sortDate";
     private static final String TAG_SORT_Rating = "sortRating";
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 
     @Bind(R.id.app_bar)
     Toolbar mToolbar;
