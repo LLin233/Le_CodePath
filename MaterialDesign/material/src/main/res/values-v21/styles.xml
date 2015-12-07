@@ -2,26 +2,10 @@
 <resources>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:colorControlHighlight">@color/colorHighlight</item>
         <item name="android:windowContentTransitions">true</item>
-    </style>
-
-    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@color/colorAccent</item>
-        <item name="tabTextAppearance">@style/MyCustomTextAppearance</item>
-    </style>
-
-    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-    </style>
-
-
-    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:colorControlHighlight">@color/colorHighlight</item>
+        <item name="android:windowTransitionBackgroundFadeDuration">5000</item>
     </style>
 
 </resources>

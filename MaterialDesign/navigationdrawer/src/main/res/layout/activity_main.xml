@@ -19,6 +19,7 @@
 
     </RelativeLayout>
 
+
     <fragment
         android:id="@+id/fragment_navigation_drawer"
         android:name="androidpath.ll.navigationdrawer.NavigationDrawerFragment"

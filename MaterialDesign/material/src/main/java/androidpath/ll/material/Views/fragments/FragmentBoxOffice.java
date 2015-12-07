@@ -1,6 +1,5 @@
 package androidpath.ll.material.Views.fragments;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,26 +31,18 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentBoxOffice#newInstance} factory method to
- * create an instance of this fragment.
+ * A simple {@link Fragment} subclass. Use the {@link FragmentBoxOffice#newInstance} factory method to create an instance of this fragment.
  */
-public class FragmentBoxOffice extends Fragment implements SortListener, BoxOfficeMoviesLoadedCallback, SwipeRefreshLayout.OnRefreshListener {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class FragmentBoxOffice extends Fragment implements SortListener, BoxOfficeMoviesLoadedCallback, SwipeRefreshLayout.OnRefreshListener { /* the fragment initialization parameters, e.g. ARG_ITEM_NUMBER*/
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String STATE_MOVIES = "stateMovies";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private ArrayList<Movie> mListMovies;
     private MovieSorter mMovieSorter;
     private DBHelper mDBHelper;
-
-    private BoxOfficeAdapter mBoxOfficeAdapter;
-
-    //UI
+    private BoxOfficeAdapter mBoxOfficeAdapter; /*UI*/
     @Bind(R.id.listMovieHits)
     RecyclerView mRecyclerViewMovieList;
     @Bind(R.id.textVolleyError)
@@ -59,16 +50,9 @@ public class FragmentBoxOffice extends Fragment implements SortListener, BoxOffi
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentBoxOffice.
+     * Use this factory method to create a new instance of this fragment using the provided parameters. @param param1 Parameter 1. @param param2 Parameter 2. @return A new instance of fragment FragmentBoxOffice.
      */
-    // TODO: Rename and change types and number of parameters
     public static FragmentBoxOffice newInstance(String param1, String param2) {
         FragmentBoxOffice fragment = new FragmentBoxOffice();
         Bundle args = new Bundle();
@@ -78,14 +62,11 @@ public class FragmentBoxOffice extends Fragment implements SortListener, BoxOffi
         return fragment;
     }
 
-    public FragmentBoxOffice() {
-        // Required empty public constructor
-    }
+    public FragmentBoxOffice() { /* Required empty public constructor*/ }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //save movieList here so data won't reload without order when orientation has been changed
+        super.onSaveInstanceState(outState); /*save movieList here so data won't reload without order when orientation has been changed*/
         outState.putParcelableArrayList(STATE_MOVIES, mListMovies);
     }
 
@@ -148,7 +129,6 @@ public class FragmentBoxOffice extends Fragment implements SortListener, BoxOffi
             mListMovies = (ArrayList<Movie>) mDBHelper.getAll();
             if (mListMovies.isEmpty()) {
                 //start an AsyncTask to request latest data when app started and nothing on Database
-                //TODO refrash data by user
                 new RequestBoxOffice(getActivity(), this).execute();
             }
         }
@@ -195,4 +175,5 @@ public class FragmentBoxOffice extends Fragment implements SortListener, BoxOffi
     public void onRefresh() {
         new RequestBoxOffice(getActivity(), this).execute();
     }
+
 }

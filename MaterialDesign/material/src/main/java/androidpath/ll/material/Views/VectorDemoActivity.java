@@ -29,12 +29,11 @@ public class VectorDemoActivity extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.vectorImage);
         Drawable drawable = null;
 
-        if(SDKVersionUtil.isLolipopOrGreater()) {
+        if (SDKVersionUtil.isLolipopOrGreater()) {
             drawable = MrVector.inflate(getResources(), R.drawable.animator_vector_clock);
         } else {
             drawable = MrVector.inflate(getResources(), R.drawable.vector_clock);
         }
-
 
         if (SDKVersionUtil.isJellyBeanOrGreater()) {
             mImageView.setBackground(drawable);
@@ -43,11 +42,8 @@ public class VectorDemoActivity extends AppCompatActivity {
         }
 
         if (drawable instanceof Animatable) {
-            ((Animatable)drawable).start();
+            ((Animatable) drawable).start();
         }
-
-
-
     }
 
 }
