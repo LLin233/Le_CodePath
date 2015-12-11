@@ -14,7 +14,7 @@ public class AnimationUtils {
         AnimatorSet mAnimatorSet = new AnimatorSet();
         ObjectAnimator animatorTranslateY = ObjectAnimator.ofFloat(holder.itemView, "translationY", isScrollingDown ? 100 : -100, 0);
         ObjectAnimator animatorVibrateX = ObjectAnimator.ofFloat(holder.itemView, "translationX", -25, 25, -20, 20, -15, 15, -10, 10, -5, 5, 0);
-        mAnimatorSet.setDuration(1000);
+        mAnimatorSet.setDuration(500);
         mAnimatorSet.playTogether(animatorTranslateY, animatorVibrateX);
         mAnimatorSet.start();
     }

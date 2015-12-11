@@ -20,7 +20,6 @@ import java.util.Date;
 import androidpath.ll.material.Models.AppConstants;
 import androidpath.ll.material.Models.Movie;
 import androidpath.ll.material.R;
-import androidpath.ll.material.Utils.AnimationUtils;
 import androidpath.ll.material.network.VolleySingleton;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -75,13 +74,13 @@ public class BoxOfficeAdapter extends RecyclerView.Adapter<BoxOfficeAdapter.BoxO
             holder.movieAudienceScore.setAlpha(1.0f);
         }
 
-        if (position > previousPosition) {
-            //scroll down
-            AnimationUtils.animate(holder, true);
-        } else {
-            //scroll up
-            AnimationUtils.animate(holder, false);
-        }
+//        if (position > previousPosition) {
+//            //scroll down
+//            AnimationUtils.animate(holder, true);
+//        } else {
+//            //scroll up
+//            AnimationUtils.animate(holder, false);
+//        }
         previousPosition = position;
 
         String urlThumnail = movie.getUrlThumbnail();

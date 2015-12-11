@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     TextView mTimeText;
     @Bind(R.id.toggleButton)
     ToggleButton mToggleButton;
-
-
+    Clockwerk mTimer;
+    private EditText inputTime;
     private Handler mHandler;
 
     @Override
@@ -37,16 +37,10 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         Typeface costomFont = Typeface.createFromAsset(getAssets(), "fonts/source_sans_pro_light.ttf");
         mTimeText.setTypeface(costomFont);
         mToggleButton.setOnCheckedChangeListener(this);
-
         mHandler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Log.v(TAG, "called");
-                mHandler.postDelayed(this, 1000);
-            }
-        };
-        mHandler.postDelayed(runnable, 1000);
+        mTimer = new Clockwerk(5000, mHandler);
+
+
     }
 
     @Override
@@ -54,12 +48,35 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         if (isChecked) {
             Toast.makeText(this, "start", Toast.LENGTH_SHORT).show();
             LayoutInflater mLayoutInflater = LayoutInflater.from(this);
-            View view = mLayoutInflater.inflate(R.layout.user_input, null);
-            EditText inputTime = (EditText) findViewById(R.id.input_time);
+            final View view = mLayoutInflater.inflate(R.layout.user_input, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Please Enter The Time")
-                    .setView(R.layout.user_input)
-                    .setPositiveButton("OK", this)
+                    .setView(view)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            inputTime = (EditText) view.findViewById(R.id.input_time);
+                            if (inputTime != null) {
+                                String input = inputTime.getText().toString();
+                                if (input != null || input.length() != 0) {
+                                    input = input.trim();
+                                    int indexOfColon = input.indexOf(':');
+                                    if (input.length() == 5 && indexOfColon == 2) { // 0 1 : 2 3
+                                        try {
+                                            int minutes = Integer.parseInt(input.substring(0, 2));
+                                            int seconds = Integer.parseInt(input.substring(3, input.length()));
+                                            long milliseconds = (minutes * 60 + seconds) * 1000;
+                                            mTimer.setTimeRemaining(milliseconds);
+                                            mTimer.start();
+                                        } catch (NumberFormatException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    })
                     .setNegativeButton("Cancel", this)
                     .show();
         } else {
@@ -68,11 +85,14 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
     }
 
+
     @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
                 Log.v(TAG, "OK");
+
+
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 Log.v(TAG, "Cancelled");

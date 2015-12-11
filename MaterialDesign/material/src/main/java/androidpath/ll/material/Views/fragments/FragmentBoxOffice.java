@@ -29,6 +29,7 @@ import androidpath.ll.material.interfaces.BoxOfficeMoviesLoadedCallback;
 import androidpath.ll.material.interfaces.SortListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 /**
  * A simple {@link Fragment} subclass. Use the {@link FragmentBoxOffice#newInstance} factory method to create an instance of this fragment.
@@ -121,6 +122,7 @@ public class FragmentBoxOffice extends Fragment implements SortListener, BoxOffi
 
         mRecyclerViewMovieList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBoxOfficeAdapter = new BoxOfficeAdapter(getActivity());
+        mRecyclerViewMovieList.setItemAnimator(new SlideInLeftAnimator());
         mRecyclerViewMovieList.setAdapter(mBoxOfficeAdapter);
 
         if (savedInstanceState != null) {
