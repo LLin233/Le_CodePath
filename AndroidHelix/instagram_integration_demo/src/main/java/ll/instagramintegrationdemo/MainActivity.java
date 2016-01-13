@@ -1,6 +1,8 @@
 package ll.instagramintegrationdemo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,10 +36,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String redirectUri = "fotitionchallenge://connect";
 
     public Instagram mInstagram;
-
+    private static SharedPreferences mSharedPreferences;
 
     private static final int GRID_COLUMN = 3;
+
     private RecyclerView mRecyclerView;
+    private Button mLoginButton;
     private GridAdapter mGridAdapter;
     private ListAdapter mListAdapter;
     private List<Media> mDatas = new ArrayList<>();
@@ -62,20 +66,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        Button loginButton = (Button) findViewById(R.id.loginbutton);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        mSharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        mLoginButton = (Button) findViewById(R.id.loginbutton);
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Intent intent = new Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(Instagram.requestOAuthUrl(clientId, redirectUri, null)));
-                    Log.d("OAUTH URL", Uri.parse(Instagram.requestOAuthUrl(clientId, redirectUri, null)).toString());
-                    startActivity(intent);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
+                loginWithOauth();
             }
         });
 
@@ -88,6 +84,18 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mGridAdapter);
 
 
+    }
+
+    private void loginWithOauth() {
+        try {
+            Intent intent = new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(Instagram.requestOAuthUrl(clientId, redirectUri, null)));
+            Log.d("OAUTH URL", Uri.parse(Instagram.requestOAuthUrl(clientId, redirectUri, null)).toString());
+            startActivity(intent);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     void onEvent(LoadPhotoEvent event) {
@@ -107,16 +115,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         // the intent filter defined in AndroidManifest will handle the return from ACTION_VIEW intent
         super.onResume();
-        if (mInstagram == null) {
+        if (!isInstagramLoggedIn()) {
             Uri uri = getIntent().getData();
             if (uri != null && uri.toString().startsWith(redirectUri)) {
                 final String[] parts = uri.toString().split("=");
-                mInstagram = new Instagram(parts[1]);
                 accessToken = parts[1];
-                Log.d(TAG, uri.toString());
+                mInstagram = new Instagram(accessToken);
+                mLoginButton.setVisibility(View.GONE);
+                saveAccessToken(accessToken);
                 mInstagram.getUsersEndpoint().getSelf();
                 mInstagram.getUsersEndpoint().getRecentMediaList();
             }
+        } else {
+            mLoginButton.setVisibility(View.GONE);
+            accessToken = mSharedPreferences.getString(Constants.PREF_KEY_OAUTH_TOKEN, "");
+            Log.d(TAG, accessToken);
+            mInstagram = new Instagram(accessToken);
+            mInstagram.getUsersEndpoint().getRecentMediaList();
         }
 
     }
@@ -129,12 +144,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem loginItem = menu.findItem(R.id.action_log_in);
+        if (isInstagramLoggedIn()) {
+            loginItem.setTitle("Log out");
+        } else {
+            loginItem.setTitle("Log in");
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_log_out:
+            case R.id.action_log_in:
+                if (isInstagramLoggedIn()) {
+                    logoutFromInstagram();
+                    item.setTitle("Log in");
+                } else {
+                    loginWithOauth();
+                    item.setTitle("Log out");
+                }
                 return true;
             case R.id.action_layout_toggle:
                 if (mCurrentLayout == GRID) {
@@ -157,6 +190,34 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void saveAccessToken(String accessToken) {
+        SharedPreferences.Editor e = mSharedPreferences.edit();
+        e.putString(Constants.PREF_KEY_OAUTH_TOKEN, accessToken);
+        e.putBoolean(Constants.PREF_KEY_INSTAGRAM_LOGIN, true);
+        e.apply(); // save changes
+    }
+
+
+    private void logoutFromInstagram() {
+        // Clear the shared preferences
+        SharedPreferences.Editor e = mSharedPreferences.edit();
+        e.remove(Constants.PREF_KEY_OAUTH_TOKEN);
+        e.remove(Constants.PREF_KEY_INSTAGRAM_LOGIN);
+        e.apply();
+
+        // After this take the appropriate action
+        // I am showing the hiding/showing buttons again
+        // You might not needed this code
+        mLoginButton.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+
+    }
+
+    private boolean isInstagramLoggedIn() {
+        return mSharedPreferences.getBoolean(Constants.PREF_KEY_INSTAGRAM_LOGIN, false);
     }
 
     @Override
