@@ -1,4 +1,8 @@
-package ll.instagramintegrationdemo;
+package ll.instagramintegrationdemo.adapter;
+
+/**
+ * Created by Le on 2016/1/12.
+ */
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,27 +11,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 import ll.instagramintegrationdemo.Model.Media;
+import ll.instagramintegrationdemo.R;
 
 /**
- * Created by Le on 2016/1/12.
+ * Grid Adapter for Grid View
  */
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 
     private int itemsCount = 0;
-    private List<Media> mItems;
     private Context mContext;
+    private List<Media> mItems;
 
-
-    public ListAdapter(Context context) {
+    public GridAdapter(Context context) {
         this.mContext = context;
     }
 
@@ -44,7 +45,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.image_list_item_layout, parent, false);
+                R.layout.image_grid_item_layout, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -52,11 +53,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Log.d("BindView", "Called + " + position);
-        Media item = mItems.get(position);
         Picasso.with(mContext)
-                .load(item.getImages().getLowResolution().getUrl())
+                .load(mItems.get(position).getImages().getThumbnail().getUrl())
                 .into(holder.mImageView);
-        holder.mTextView.setText(item.getUser().getUsername());
     }
 
     @Override
@@ -74,13 +73,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
      */
     static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
-        public TextView mTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mTextView =  (TextView) itemView.findViewById(R.id.username);
-            mImageView = (ImageView) itemView.findViewById(R.id.img_low);
+            mImageView = (ImageView) itemView.findViewById(R.id.img_thumbnail);
         }
     }
-}
 
+}

@@ -1,4 +1,4 @@
-package ll.instagramintegrationdemo;
+package ll.instagramintegrationdemo.Utils;
 
 import java.net.URI;
 import java.net.URISyntaxException;

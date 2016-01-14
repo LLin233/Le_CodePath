@@ -1,4 +1,4 @@
-package ll.instagramintegrationdemo;
+package ll.instagramintegrationdemo.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

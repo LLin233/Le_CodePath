@@ -16,7 +16,7 @@
         card_view:cardCornerRadius="3dp"
         card_view:cardElevation="3dp">
 
-        <ll.instagramintegrationdemo.SquareImageView
+        <ll.instagramintegrationdemo.ui.SquareImageView
             android:id="@+id/img_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -23,11 +25,15 @@ import de.greenrobot.event.EventBus;
 import ll.instagramintegrationdemo.Model.CurrentLayout;
 import ll.instagramintegrationdemo.Model.LoadPhotoEvent;
 import ll.instagramintegrationdemo.Model.Media;
+import ll.instagramintegrationdemo.Utils.Constants;
+import ll.instagramintegrationdemo.Utils.Instagram;
+import ll.instagramintegrationdemo.adapter.GridAdapter;
+import ll.instagramintegrationdemo.adapter.ListAdapter;
 
 import static ll.instagramintegrationdemo.Model.CurrentLayout.GRID;
 import static ll.instagramintegrationdemo.Model.CurrentLayout.LINEAR;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private final String TAG = getClass().getSimpleName();
     private CurrentLayout mCurrentLayout = GRID;
 
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private Button mLoginButton;
+    private SwipeRefreshLayout mSwipeLayout;
     private GridAdapter mGridAdapter;
     private ListAdapter mListAdapter;
     private List<Media> mDatas = new ArrayList<>();
@@ -74,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
                 loginWithOauth();
             }
         });
+
+
+        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mSwipeLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeLayout.setOnRefreshListener(this);
 
         // Calling the RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -109,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 mListAdapter.updateItems(mDatas.size());
                 mListAdapter.setDataSets(mDatas);
         }
+        if (mSwipeLayout.isRefreshing()) {
+            mSwipeLayout.setRefreshing(false);
+        }
     }
 
     @Override
@@ -123,15 +138,15 @@ public class MainActivity extends AppCompatActivity {
                 mInstagram = new Instagram(accessToken);
                 mLoginButton.setVisibility(View.GONE);
                 saveAccessToken(accessToken);
-                mInstagram.getUsersEndpoint().getSelf();
-                mInstagram.getUsersEndpoint().getRecentMediaList();
+                mInstagram.getUsersEndpoint().requestSelf();
+                mInstagram.getUsersEndpoint().requestRecentMediaList();
             }
         } else {
             mLoginButton.setVisibility(View.GONE);
             accessToken = mSharedPreferences.getString(Constants.PREF_KEY_OAUTH_TOKEN, "");
             Log.d(TAG, accessToken);
             mInstagram = new Instagram(accessToken);
-            mInstagram.getUsersEndpoint().getRecentMediaList();
+            mInstagram.getUsersEndpoint().requestRecentMediaList();
         }
 
     }
@@ -210,10 +225,8 @@ public class MainActivity extends AppCompatActivity {
 
         // After this take the appropriate action
         // I am showing the hiding/showing buttons again
-        // You might not needed this code
         mLoginButton.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
-
     }
 
     private boolean isInstagramLoggedIn() {
@@ -226,5 +239,14 @@ public class MainActivity extends AppCompatActivity {
             EventBus.getDefault().unregister(this);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onRefresh() {
+        if (isInstagramLoggedIn()) {
+            mInstagram.getUsersEndpoint().requestRecentMediaList();
+        } else {
+            Toast.makeText(this, "Please Login First", Toast.LENGTH_SHORT);
+        }
     }
 }

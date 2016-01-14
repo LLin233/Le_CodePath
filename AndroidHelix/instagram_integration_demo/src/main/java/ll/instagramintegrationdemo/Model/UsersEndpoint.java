@@ -53,15 +53,13 @@ public final class UsersEndpoint extends BaseEndpoint {
         return userService;
     }
 
-    public User getSelf() {
+    public void requestSelf() {
         //return userService.getUser("self", accessToken).execute().body().getUser();
-        final User[] self = {null};
         userService.getUser("self", accessToken).enqueue(new Callback<Profile>() {
             @Override
             public void onResponse(Response<Profile> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
-                    self[0] = response.body().getUser();
-                    Log.d("User", self[0].toString());
+                    Log.d("User",  response.body().getUser().toString());  // could be used in profile page
                 }
             }
 
@@ -70,40 +68,9 @@ public final class UsersEndpoint extends BaseEndpoint {
                 Log.d("User", t.toString());
             }
         });
-        if (self.length == 0) {
-            throw new IllegalArgumentException();
-        }
-        return self[0];
     }
 
-    public User getUser(final String userId) throws IOException {
-        return userService.getUser(userId, accessToken).execute().body().getUser();
-    }
-
-
-    public Recent getRecent() {
-        final Recent[] recent = {null};
-        userService.getRecent("self", accessToken, 20).enqueue(new Callback<Recent>() {
-            @Override
-            public void onResponse(Response<Recent> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    recent[0] = response.body();
-                    for (Media item : response.body().getMediaList()) {
-                        Log.d("User", item.toString());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                throw new IllegalArgumentException();
-            }
-        });
-
-        return recent[0];
-    }
-
-    public List<Media> getRecentMediaList() {
+    public void requestRecentMediaList() {
         userService.getRecent("self", accessToken, 20).enqueue(new Callback<Recent>() {
             @Override
             public void onResponse(Response<Recent> response, Retrofit retrofit) {
@@ -121,12 +88,6 @@ public final class UsersEndpoint extends BaseEndpoint {
                 throw new IllegalArgumentException();
             }
         });
-        return list;
     }
-
-    public Recent getRecent(final String userId, final Integer count, final String minId, final String maxId, final Long minTimestamp, final Long maxTimestamp) {
-        return (Recent) userService.getRecent(userId, accessToken, count);
-    }
-
 
 }
