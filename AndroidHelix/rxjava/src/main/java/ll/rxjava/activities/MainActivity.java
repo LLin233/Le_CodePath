@@ -1,16 +1,16 @@
-package ll.rxjava;
+package ll.rxjava.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ll.rxjava.R;
+import ll.rxjava.RxBus;
+import ll.rxjava.models.TapEvent;
 import rx.Observable;
-import rx.Subscription;
 import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         mRxBus = this.getRxBusSingleton();
 
         Observable.just("Hello, world!", "Leonard")
@@ -46,10 +45,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
 
+    @OnClick(R.id.main_b_nocache)
+    public void gotoNoCache(View view) {
+        startActivity(new Intent(this, NocacheActivity.class));
+    }
 
-
-
+    @OnClick(R.id.main_b_cache)
+    public void gotoCache(View view) {
+        startActivity(new Intent(this, CacheActivity.class));
     }
 
     void showToast(String msg) {
