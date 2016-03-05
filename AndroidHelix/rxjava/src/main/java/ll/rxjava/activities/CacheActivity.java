@@ -76,7 +76,7 @@ public class CacheActivity extends AppCompatActivity {
     }
 
     private void fetchUpdates() {
-        mGitHubClient.getRepos("SpikeKing")
+        mGitHubClient.getRepos("LLin233")
                 .delay(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
