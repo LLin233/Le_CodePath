@@ -3,15 +3,16 @@ package ll.rxjava.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ll.rxjava.R;
 import ll.rxjava.RxBus;
 import ll.rxjava.models.TapEvent;
 import rx.Observable;
-import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity {
     private RxBus mRxBus = null;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         mRxBus = this.getRxBusSingleton();
 
         Observable.just("Hello, world!", "Leonard")
@@ -37,12 +39,9 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(s -> System.out.println(s));
 
         mRxBus.toObserverable()
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object event) {
-                        if (event instanceof TapEvent) {
-                            showToast(((TapEvent) event).getMsg());
-                        }
+                .subscribe(event -> {
+                    if (event instanceof TapEvent) {
+                        showToast(((TapEvent) event).getMsg());
                     }
                 });
     }
@@ -63,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button)
     public void onTapButtonClicked() {
+        Log.i("Main", "clicked");
         mRxBus.send(new TapEvent("Rxjava!"));
     }
 }
