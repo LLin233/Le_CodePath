@@ -2,6 +2,7 @@ package ll.morerxjava;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,7 +12,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class SimpleActivity extends Activity {
+public class SimpleActivity extends AppCompatActivity {
 
     @Bind(R.id.simple_tv_text)
     TextView mTvText;

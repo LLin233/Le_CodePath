@@ -16,4 +16,8 @@ public class MainActivity extends AppCompatActivity {
     public void gotoSimpleModule(View view) {
         startActivity(new Intent(this, SimpleActivity.class));
     }
+
+    public void gotoMoreModule(View view) {
+        startActivity(new Intent(this, MoreActivity.class));
+    }
 }
