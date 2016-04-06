@@ -20,4 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public void gotoMoreModule(View view) {
         startActivity(new Intent(this, MoreActivity.class));
     }
+    public void gotoLambdaModule(View view) {
+        startActivity(new Intent(this, LambdaActivity .class));
+    }
 }
