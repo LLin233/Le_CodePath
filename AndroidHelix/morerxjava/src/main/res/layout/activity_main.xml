@@ -22,4 +22,16 @@
         android:layout_height="wrap_content"
         android:onClick="gotoMoreModule"
         android:text="more"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="gotoLambdaModule"
+        android:text="lambda"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="gotoNetworkModule"
+        android:text="network"/>
 </LinearLayout>
