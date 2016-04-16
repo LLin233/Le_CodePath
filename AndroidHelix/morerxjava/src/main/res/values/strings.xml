@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">moreRxjava</string>
+    <string name="usual_approach">usual</string>
+    <string name="reactive_approach">reactive</string>
+
+    <string name="menu_add">add</string>
+    <string name="menu_delete">delete</string>
 </resources>

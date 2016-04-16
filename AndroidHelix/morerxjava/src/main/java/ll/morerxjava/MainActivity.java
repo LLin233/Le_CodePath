@@ -28,5 +28,12 @@ public class MainActivity extends AppCompatActivity {
     public void gotoNetworkModule(View view) {
         startActivity(new Intent(this, NetworkActivity.class));
     }
+    public void gotoSafeModule(View view) {
+        startActivity(new Intent(this, SafeActivity.class));
+    }
+
+    public void gotoBindingModule(View view) {
+        startActivity(new Intent(this, BindingActivity.class));
+    }
 
 }

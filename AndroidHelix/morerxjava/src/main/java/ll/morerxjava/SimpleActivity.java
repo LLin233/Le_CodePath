@@ -30,7 +30,6 @@ public class SimpleActivity extends AppCompatActivity {
     private Subscriber<String> mTextSubscriber = new Subscriber<String>() {
         @Override
         public void onCompleted() {
-
         }
 
         @Override

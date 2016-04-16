@@ -3,6 +3,7 @@
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,6 +26,13 @@
         <activity android:name=".NetworkActivity">
         </activity>
         <activity android:name=".NetworkDetailActivity">
+        </activity>
+        <activity android:name=".SafeActivity">
+        </activity>
+        <activity
+            android:name=".BindingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
     </application>
 
